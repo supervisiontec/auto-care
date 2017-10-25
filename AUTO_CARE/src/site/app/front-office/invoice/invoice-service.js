@@ -69,9 +69,34 @@
         this.getInvoiceByJobCard = function (indexNo) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/jobcard-invoice/find-by-job-card/" + indexNo);
         };
-
-
-
+        
+        //customer type goverment/privet
+        this.getCustomerTypes = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/customer-type");
+        };
+        this.getVehicleTypes = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/vehicle-type");
+        };
+        this.getVehicleBrands = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/vehicle/get-brand-list");
+        };
+        this.getVehicleModels = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/vehicle/get-model-list");
+        };
+        this.getPriceCategory = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/priceCategory");
+        };
+        this.getFuelType = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/vehicle/get-fuel-type-list");
+        };
+        //register Customer with save
+        this.registerCustomer = function (client) {
+            return $http.post(systemConfig.apiUrl + "/api/care-point/master/client/register-client",client);
+        };
+        this.registerVehicle = function (client) {
+            return $http.post(systemConfig.apiUrl + "/api/care-point/master/vehicle/register-detail",client);
+        };
+        
 
         //invoice viewer and print
         this.listParameters = function (report) {

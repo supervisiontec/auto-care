@@ -22,6 +22,13 @@
                     paymentInfomationData: {},
                     paymentInformationList: [],
                     invoicePaymentData: {},
+                    popupCustomer: {},
+                    popupVehicle: {},
+                    customerTypeList: [],
+                    vehicleTypeList: [],
+                    vehicleBrandList: [],
+                    vehicleModelList: [],
+                    fuelTypeList: [],
 
                     vehicleIsNew: false,
                     clientIsNew: false,
@@ -71,6 +78,27 @@
                                 .success(function (data) {
                                     that.priceCategoryList = data;
                                 });
+                        invoiceService.getCustomerTypes()
+                                .success(function (data) {
+                                    that.customerTypeList = data;
+                                });
+                        invoiceService.getVehicleTypes()
+                                .success(function (data) {
+                                    that.vehicleTypeList = data;
+                                });
+                        invoiceService.getVehicleBrands()
+                                .success(function (data) {
+                                    that.vehicleBrandList = data;
+                                });
+                        invoiceService.getVehicleModels()
+                                .success(function (data) {
+                                    that.vehicleModelList = data;
+                                });
+                        invoiceService.getFuelType()
+                                .success(function (data) {
+                                    that.fuelTypeList = data;
+                                });
+                        
                     },
                     clear: function () {
                         this.employeeData = invoiceFactory.newEmployeeData();
@@ -107,7 +135,6 @@
                         angular.forEach(this.clientList, function (values) {
                             if (values.indexNo === parseInt(indexNo)) {
                                 if (values.isNew) {
-                                    console.log(indexNo);
                                     that.clientIsNew = true;
                                     return;
 
@@ -179,6 +206,46 @@
                         });
                         return data;
                     },
+                    customerTypeLable: function (indexNo) {
+                        var data = "";
+                        angular.forEach(this.customerTypeList, function (value) {
+                            if (value.indexNo === parseInt(indexNo)) {
+                                data = value.indexNo + ' - ' + value.name;
+                                return;
+                            }
+                        });
+                        return data;
+                    },
+                    clientLable: function (indexNo) {
+                        var data = "";
+                        angular.forEach(this.clientList, function (value) {
+                            if (value.indexNo === parseInt(indexNo)) {
+                                data = value.indexNo + ' - ' + value.name;
+                                return;
+                            }
+                        });
+                        return data;
+                    },
+                    vehicleTypeLabel: function (indexNo) {
+                        var data = "";
+                        angular.forEach(this.vehicleTypeList, function (value) {
+                            if (value.indexNo === parseInt(indexNo)) {
+                                data = value.indexNo + ' - ' + value.model;
+                                return;
+                            }
+                        });
+                        return data;
+                    },
+                    priceCategoryLabel: function (indexNo) {
+                        var data = "";
+                        angular.forEach(this.priceCategoryList, function (value) {
+                            if (value.indexNo === parseInt(indexNo)) {
+                                data = value.indexNo + ' - ' + value.name;
+                                return;
+                            }
+                        });
+                        return data;
+                    },
                     findByBranchList: function (bank) {
                         var that = this;
                         var defer = $q;
@@ -216,7 +283,6 @@
                         var that = this;
                         invoiceService.getClientOverPayment(client)
                                 .success(function (data) {
-                                    console.log(data);
                                     if (data > 0) {
                                         that.paymentData.overAmount = parseFloat(data);
                                     } else {
@@ -234,7 +300,6 @@
                         var that = this;
                         invoiceService.getClientBalance(client)
                                 .success(function (data) {
-                                    console.log(data);
                                     if (data > 0) {
                                         that.paymentData.creditAmount = parseFloat(data);
                                     }
@@ -393,6 +458,52 @@
                             }
                         });
                         return data;
+                    },
+                    selectedCustomerObject: function (index) {
+                        this.popupCustomer = this.client(index);
+                    },
+                    selectedVehicleObject: function (index) {
+                        this.popupVehicle = this.vehicle(index);
+                    },
+                    registerCustomer: function () {
+                        var that = this;
+                        var defer = $q.defer();
+
+                        invoiceService.registerCustomer(JSON.stringify(this.popupCustomer))
+                                .success(function (data) {
+                                    angular.forEach(that.clientList, function (value) {
+                                        if (value.indexNo === parseInt(data.indexNo)) {
+                                            value.isNew=false;
+                                            return;
+                                        }
+                                    });
+                                    that.clientIsNew=false;
+                                    defer.resolve(data);
+                                })
+                                .error(function () {
+                                    defer.reject();
+                                });
+                        return  defer.promise;
+                    },
+                    registerVehicle: function () {
+                        var that = this;
+                        var defer = $q.defer();
+
+                        invoiceService.registerVehicle(JSON.stringify(this.popupVehicle))
+                                .success(function (data) {
+                                    angular.forEach(that.vehicleList, function (value) {
+                                        if (value.indexNo === parseInt(data.indexNo)) {
+                                            value.isNew=false;
+                                            return;
+                                        }
+                                    });
+                                    that.vehicleIsNew=false;
+                                    defer.resolve(data);
+                                })
+                                .error(function () {
+                                    defer.reject();
+                                });
+                        return  defer.promise;
                     }
 
                 };

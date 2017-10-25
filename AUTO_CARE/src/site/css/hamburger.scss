@@ -5,7 +5,6 @@
     position:absolute;
     margin:auto;
     float:left;
-    margin-left: -16px;
 
     div{
         width: 40px;
@@ -24,7 +23,6 @@
             opacity: 1;
             transition: .6s ease-in-out;
             background-color: $dark-font-color;
-            margin-left: 20px;
         }
 
         span:nth-child(1) {

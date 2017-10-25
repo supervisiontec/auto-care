@@ -36,6 +36,12 @@ public class clientController {
     @RequestMapping(value = "/insert-client", method = RequestMethod.POST)
     public Client insertDetail(@RequestBody Client client) {
         client.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        client.setIsNew(false);
+        return clientService.saveDetail(client);
+    }
+    @RequestMapping(value = "/register-client", method = RequestMethod.POST)
+    public Client registerClient(@RequestBody Client client) {
+        client.setIsNew(false);
         return clientService.saveDetail(client);
     }
 

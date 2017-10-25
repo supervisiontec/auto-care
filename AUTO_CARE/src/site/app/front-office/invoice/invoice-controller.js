@@ -1,7 +1,7 @@
 (function () {
     angular.module("invoiceModule", ['ui.bootstrap']);
     angular.module("invoiceModule")
-            .controller("invoiceController", function ($scope, $sce, invoiceService, systemConfig, $window, $uibModal, $filter, optionPane, invoiceModel, Notification, ConfirmPane) {
+            .controller("invoiceController", function ($scope, $sce, invoiceService, systemConfig, $window, $uibModal, $uibModalStack, $filter, optionPane, invoiceModel, Notification, ConfirmPane) {
 
                 $scope.invoiceModel = new invoiceModel();
                 $scope.model = {};
@@ -67,12 +67,98 @@
                     }
                 };
                 $scope.ui.registerNewCustomerDetail = function () {
-                    console.log('location');
-                    $window.location.href = systemConfig.apiUrl + "#/master/client/" + $scope.selectedCustomer;
+                    //model open
+                    $scope.invoiceModel.selectedCustomerObject($scope.selectedCustomer);
+                    $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'customer.html',
+                        scope: $scope,
+                        size: 'lg'
+                    });
+
+                };
+                $scope.ui.registerCustomer = function () {
+                    var check = true;
+                    if (!$scope.invoiceModel.popupCustomer.name) {
+                        check = false;
+                        Notification.error('Customer Name is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupCustomer.resident) {
+                        check = false;
+                        Notification.error('select a resident to save !');
+                    }
+                    if (!$scope.invoiceModel.popupCustomer.mobile) {
+                        check = false;
+                        Notification.error('mobile number is empty !');
+                    }
+                    if (!$scope.invoiceModel.popupCustomer.nic) {
+                        check = false;
+                        Notification.error('NIC is empty !');
+                    }
+                    if (!$scope.invoiceModel.popupCustomer.customerType) {
+                        check = false;
+                        Notification.error('customerType is empty !');
+                    }
+                    if (check) {
+                        $scope.invoiceModel.registerCustomer()
+                                .then(function (data) {
+                                    Notification.success(data.resident+" "+data.name+" registration successfully");
+                                    $scope.ui.modelCancel();
+                                });
+                    }
                 };
                 $scope.ui.registerNewVehicleDetail = function () {
-                    console.log('location 2');
-                    $window.location.href = systemConfig.apiUrl + "#/master/vehicle/" + $scope.selectedVehicle;
+                    //model open
+                    $scope.invoiceModel.selectedVehicleObject($scope.selectedVehicle);
+                    $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'vehicle.html',
+                        scope: $scope,
+                        size: 'lg'
+                    });
+
+                };
+                $scope.ui.registerVehicle=function (){
+                     var check = true;
+                    if (!$scope.invoiceModel.popupVehicle.client) {
+                        check = false;
+                        Notification.error('Customer is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.vehicleType) {
+                        check = false;
+                        Notification.error('vehicleType is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.type) {
+                        check = false;
+                        Notification.error('Type is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.brand) {
+                        check = false;
+                        Notification.error('brand is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.vehicleNo) {
+                        check = false;
+                        Notification.error('vehicleNo is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.model) {
+                        check = false;
+                        Notification.error('model is Empty !');
+                    }
+                    if (!$scope.invoiceModel.popupVehicle.priceCategory) {
+                        check = false;
+                        Notification.error('priceCategory is Empty !');
+                    }
+                    if (check) {
+                        $scope.invoiceModel.registerVehicle()
+                                .then(function (data) {
+                                    Notification.success(data.vehicleNo+" registration successfully");
+                                    $scope.ui.modelCancel();
+                                });
+                    }
                 };
 
                 $scope.ui.getRepEmployeeData = function (indexNo) {
@@ -291,6 +377,12 @@
                 $scope.ui.getDiscountAmount = function () {
                     $scope.invoiceModel.invoiceData.discountAmount = parseFloat(($scope.invoiceModel.invoiceData.amount * $scope.invoiceModel.invoiceData.discountRate) / 100);
                     $scope.invoiceModel.invoiceData.netAmount = parseFloat($scope.invoiceModel.invoiceData.amount - $scope.invoiceModel.invoiceData.discountAmount);
+                };
+                $scope.ui.modelCancel = function () {
+                    $uibModalStack.dismissAll();
+                };
+                $scope.ui.registerCusromer = function () {
+                    Notification.success('reg');
                 };
 
                 $scope.init = function () {
