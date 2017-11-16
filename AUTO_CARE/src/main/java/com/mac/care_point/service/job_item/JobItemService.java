@@ -5,7 +5,8 @@
  */
 package com.mac.care_point.service.job_item;
 
-import com.mac.care_point.master.items.items.model.MItemL;
+import com.mac.care_point.master.items.package_item.PackageItemRepository;
+import com.mac.care_point.master.items.package_item.model.MPackageItem;
 import com.mac.care_point.service.common.Constant;
 import com.mac.care_point.service.final_check_list.MItemCheckDetailRepository;
 import com.mac.care_point.service.final_check_list.TJobItemCheckRepository;
@@ -13,6 +14,8 @@ import com.mac.care_point.service.final_check_list.model.MItemCheckDetail;
 import com.mac.care_point.service.final_check_list.model.TJobItemCheck;
 import com.mac.care_point.service.grn.StockLedgerRepository;
 import com.mac.care_point.service.grn.model.TStockLedger;
+import com.mac.care_point.service.job_item.model.TJobCardActivities;
+import com.mac.care_point.service.job_item.model.MItemL;
 import com.mac.care_point.service.job_item.model.TJobItem;
 import com.mac.care_point.service.stock.transfer.model.MStore;
 import java.math.BigDecimal;
@@ -45,10 +48,16 @@ public class JobItemService {
     private TJobItemCheckRepository itemCheckRepository;
 
     @Autowired
+    private PackageItemRepository packageItemRepository;
+
+    @Autowired
     private MItemCheckDetailRepository itemCheckDetailRepository;
 
     @Autowired
     private MItemLRepository mItemLRepository;
+
+    @Autowired
+    private JobCardActivitiesRepository jobCardActivitiesRepository;
 
     public List<MItemL> findAllMItemL() {
         return mItemLRepository.findAll();
@@ -80,6 +89,31 @@ public class JobItemService {
         TJobItem getSaveData = jobItemRepository.save(jobItem);
         List<MItemCheckDetail> getFindJobItemList = itemCheckDetailRepository.findByItem(jobItem.getItem());
 
+        MItemL mItemL = mItemLRepository.findOne(jobItem.getItem());
+        if ("SERVICE".equals(mItemL.getType())) {
+            TJobCardActivities tJobCardActivities = new TJobCardActivities();
+            tJobCardActivities.setActivityTime(mItemL.getTime());
+            tJobCardActivities.setItem(jobItem.getItem());
+            tJobCardActivities.setJobCard(jobItem.getJobCard());
+            tJobCardActivities.setUsed(false);
+            tJobCardActivities.setJobItem(getSaveData.getIndexNo());
+            jobCardActivitiesRepository.save(tJobCardActivities);
+
+        } else if ("PACKAGE".equals(mItemL.getType())) {
+
+            List<MPackageItem> packageList = packageItemRepository.findByPackages(jobItem.getItem());
+            for (MPackageItem mPackageItem : packageList) {
+                TJobCardActivities tJobCardActivities = new TJobCardActivities();
+                tJobCardActivities.setActivityTime(mPackageItem.getTime());
+                tJobCardActivities.setItem(mPackageItem.getItem());
+                tJobCardActivities.setJobCard(jobItem.getJobCard());
+                tJobCardActivities.setUsed(false);
+                tJobCardActivities.setJobItem(getSaveData.getIndexNo());
+                jobCardActivitiesRepository.save(tJobCardActivities);
+
+            }
+        }
+
         if (!getFindJobItemList.isEmpty()) {
             //save data from final check list
             for (MItemCheckDetail mItemCheckDetail : getFindJobItemList) {
@@ -100,12 +134,15 @@ public class JobItemService {
         return jobItemRepository.findByJobCardGetJobItemCheck(jobCard);
     }
 
+    @Transactional
     public void deleteJobItem(Integer indexNo) {
         List<TJobItemCheck> getFindJobItemList = itemCheckRepository.findByJobItem(indexNo);
         if (!getFindJobItemList.isEmpty()) {
             itemCheckRepository.delete(getFindJobItemList);
         }
         jobItemRepository.delete(indexNo);
+        jobCardActivitiesRepository.deleteByJobItem(indexNo);
+
     }
 
     public List<TJobItem> findByJobCardItems(Integer jobCardIndexNo) {
@@ -138,14 +175,7 @@ public class JobItemService {
             }
 
             //calculat avarage price
-            System.out.println("Branch");
-            System.out.println(branch);
-            System.out.println("jobItem.getItem()");
-            System.out.println(jobItem.getItem());
-
             BigDecimal itemAvaragePrice = jobItemRepository.getItemAvaragePrice(branch, jobItem.getItem());
-            System.out.println("itemAvaragePrice");
-            System.out.println(itemAvaragePrice);
             stockLedger.setAvaragePriceOut(itemAvaragePrice.multiply(jobItem.getStockRemoveQty()));
             stockLedgerRepository.save(stockLedger);
 
@@ -173,5 +203,18 @@ public class JobItemService {
 
     public List<TJobItem> changeVehiclePriceCategory(Integer jobCard) {
         return jobItemRepository.findByJobCardOrderByIndexNoDesc(jobCard);
+    }
+
+    public List<TJobCardActivities> getJobActivities(Integer jobCard,Integer bay) {
+        return jobCardActivitiesRepository.findByJobCardAndBay(jobCard,bay);
+    }
+    public List<TJobCardActivities> getJobAllActivities(Integer jobCard) {
+        return jobCardActivitiesRepository.findByJobCard(jobCard);
+        
+    }
+
+    public List<TJobCardActivities> saveActivity(List<TJobCardActivities> jobActivityList) {
+        System.out.println(jobActivityList.size()+" size");
+        return jobCardActivitiesRepository.save(jobActivityList);
     }
 }

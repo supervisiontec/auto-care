@@ -5,7 +5,8 @@
  */
 package com.mac.care_point.service.job_item;
 
-import com.mac.care_point.master.items.items.model.MItemL;
+
+import com.mac.care_point.service.job_item.model.MItemL;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,8 +34,7 @@ public interface MItemLRepository extends JpaRepository<MItemL, Integer> {
             + " item.name\n"
             + "like\n"
             + " CONCAT('%',:itemKey,'%') \n"
-            + "and\n"
-            + " item.type = \"SERVICE\"\n"
+            + "and (item.type = \"SERVICE\" or item.type = \"PACKAGE\") \n"
             + "and \n"
             + " price_category_details.price_category = :priceCategory", nativeQuery = true)
     public List<Object[]> getQuickSeacrhItem(@Param("itemKey") String itemKey, @Param("priceCategory") Integer priceCategory);

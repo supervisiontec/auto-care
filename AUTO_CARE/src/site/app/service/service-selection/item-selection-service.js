@@ -42,7 +42,7 @@
         };
 
         this.deleteJobItems = function (indexNo) {
-            return $http.delete(systemConfig.apiUrl + "/api/care-point/transaction/job-item/delete-job-items/" + indexNo);
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-item/delete-job-items/" + indexNo);
         };
 
         this.getJobItemHistory = function (indexNo) {

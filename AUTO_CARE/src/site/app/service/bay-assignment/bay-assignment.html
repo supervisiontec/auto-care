@@ -1,5 +1,5 @@
 <div class="index-content-header">
-    
+
 </div>
 <div class="index-content-body">
     <div>
@@ -12,21 +12,23 @@
                             <label class="label label-primary">Max :{{bay.maxVehicle}}</label>
                         </div>
                         <div class="col-xs-8 nopadding" ng-click="ui.selectBay(bay)">
-                            <label class="h5 pull-left" >{{bay.name}} </label> 
+                            <label class="h5 pull-left" style="margin-top: 0px;width: 100%" >{{bay.name}} </label> 
+                            <label class="h6 pull-left" style="margin-top: 0px;width: 100%" ng-hide="!bay.flatRate || bay.flatRate==='00:00:00'">Time :{{bay.flatRate}} </label> 
                         </div>
                         <div class="col-xs-1 nopadding">
-                            <a class="btn btn-danger pull-right" ng-click="stop(bay)" ng-show="bay.timeout" ><span class="glyphicon glyphicon-remove"> {{bay.timeout}}</span></a>
+                            <a class="btn btn-danger pull-right" ng-click="stop(bay)" ng-show='bay.timeout' ><span class="glyphicon glyphicon-remove"> {{bay.timeout}}</span></a>
                         </div>
                     </div>
                     <div class="smart-scroll-y" style="display: table-row;">
 
                         <div ng-repeat="job in model.jobList" ng-if="job.bay==bay.indexNo" 
                              ng-drag="{{dragableMode}}" ng-drag-data="job" class="tile tile-100-65 col-lg-6 nopadding" ng-click="ui.selectJob(job)" 
-                             style="border-style: groove;" ng-class="{'selected':job.indexNo == model.selectJob.indexNo}">
+                             style="border-style: groove;background-color: #ffffff" ng-class="ui.addClass(job) || {'selected':job.indexNo == model.selectJob.indexNo}">
                             <span  style="display: block;text-align: center;">
                                 <i  id="simple-dropdown" uib-dropdown-toggle>
                                     <img src="../../../img/05.png"/>
-                                    <h5 class="nopadding"><b class="text-default">{{getVehicle(job.vehicle).vehicleNo}}</b></h5>
+                                    <h5 class="nopadding" style="margin-top: -4px !important"><b style="color: black">{{getVehicle(job.vehicle).vehicleNo}}</b></h5>
+                                    <h6 class="nopadding"><b style="color: black">{{job.processTime}}</b></h6>
                                 </i>
                             </span>
                         </div>
@@ -34,8 +36,66 @@
                 </div>
             </div>
             <div class="placeholder col-md-12" ng-hide="model.bayList.length" style="height: calc(100vh - 72px); padding: 0px 10px 0px 10px;">
-                    <h1>EMPTY BAY FOR THIS BRANCH :(</h1>
-                </div>
+                <h1>EMPTY BAY FOR THIS BRANCH :(</h1>
+            </div>
         </div>
     </div>
 </div>
+<div class="fab-container pull-left" style="z-index: 2;opacity: 1 !important">
+    <a class="fab fab-success" ng-show='model.selectJob!==null' ng-click="ui.loadItemPopup();"><i class="glyphicon glyphicon-fullscreen"></i></a>
+    <a class="fab fab-primary" ng-show='model.selectJob!==null' ng-click="ui.setStopTime();"><i class="glyphicon glyphicon-log-out"></i></a>
+</div>
+
+<script type="text/ng-template" id="jobActivities.html">
+    <div class="col-lg-12 background-light">
+    <div class="row">
+        <div class="modal-header bg-primary">
+            <div class="col-lg-12">
+                <center>
+                    <label> Bay Assignment Item Selection</label>
+                </center>
+            </div>
+        </div>
+    <div class="modal-body" style="height:250px">
+        <div class="col-xs-12 ">
+            <table class="table-rounded control-table">
+                <col style="width: 60%"/>
+                <col style="width: 20%"/>
+                <col style="width: 20%"/>
+                <theader>
+                    <tr>
+                        <td><label>Item Description :</label></td>
+                        <td><label>Time :</label></td>
+                        <td><label>&nbsp </label></td>
+                    </tr>
+                </theader>
+            </table>
+        </div>
+        <div class="col-xs-12 smart-scroll-y" style="height:200px">
+            <table class="table-rounded control-table">
+                <col style="width: 60%"/>
+                <col style="width: 20%"/>
+                <col style="width: 20%"/>
+                <theader>
+                    <tr ng-repeat="activity in model.activityList | orderBy:'used'" ng-disabled ="activity.used"  ng-class="{'row-disabled':activity.used===true}">
+                        <td>{{item(activity.item)}}</td>
+                        <td>{{activity.activityTime}}</td>
+                            
+                        <td><input type="checkbox" ng-model="activity.setUsed" ng-disabled="activity.used" /></td>
+                    </tr>
+                </theader>
+            </table>
+        </div>
+                    
+    </div>
+    <div class="modal-footer bg-primary">
+        <div class="col-lg-12">
+            <center>
+                <input type="button" style="width:75px" class='btn btn-defsult' value="cancel" ng-click="ui.modelCancel()" />
+                <input type="button" style="width:75px" class='btn btn-success' value="ok" ng-disabled="popupDisabled"  ng-click="modelOk();"/>
+            </center>
+        </div>
+    </div>
+    </div>
+    </div>
+</script>

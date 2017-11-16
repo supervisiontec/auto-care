@@ -59,6 +59,20 @@
                                 <td><label class="control-label">Unit</label></td>
                                 <td><input class="form-control" ng-model="model.itemData.unit" ng-disabled="ui.mode !== 'EDIT'"></td>
                             </tr>
+                            <tr ng-show="textViewMode === 'SERVICE'">
+                                <td><label class="control-label">Time</label></td>
+                                <td><input class="form-control" ng-model="model.itemData.time" 
+                                           uib-typeahead="time as time for time in model.timeList |filter:$viewValue |limitTo:10" 
+                                           typeahead-input-formatter="model.timeLable($model)"
+                                           ng-disabled="ui.mode !== 'EDIT'"></td>
+                            </tr>
+                            <tr ng-show="textViewMode === 'SERVICE'">
+                                <td><label class="control-label">Bay</label></td>
+                                <td><input class="form-control" ng-model="model.itemData.bay" 
+                                           uib-typeahead="bay.indexNo as (bay.indexNo + ' - ' + bay.name) for bay in model.bayList |filter:$viewValue|limitTo:10" 
+                                           typeahead-input-formatter="model.bayLable($model)"
+                                           ng-disabled="ui.mode !== 'EDIT'"></td>
+                            </tr>
                         </tbody>
                     </table>
                     <table class="table-rounded control-table" ng-show="textViewMode === 'STOCK' || textViewMode === 'NON STOCK'">
@@ -195,7 +209,7 @@
                         <tbody>
                             <tr>
                                 <td><label class="control-label">Item*</label></td>
-                                <td><input class="form-control" ng-model="model.priceCategoryDetail.item" uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items | filter: { type: 'SERVICE' } |filter:$viewValue|limitTo:10" typeahead-input-formatter="model.itemLable($model);" typeahead-on-select="model.loadPriceCategoryDetailByItem($model);" ng-disabled="ui.mode !== 'EDIT'"></td>
+                                <td><input class="form-control" ng-model="model.priceCategoryDetail.item" uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items |  filter:$viewValue|limitTo:10" typeahead-input-formatter="model.itemLable($model);" typeahead-on-select="model.loadPriceCategoryDetailByItem($model);" ng-disabled="ui.mode !== 'EDIT'"></td>
                             </tr>
                             <tr>
                                 <td><label class="control-label">Price Category*</label></td>
@@ -437,11 +451,29 @@
                         <tbody>
                             <tr class="background-light-dark">
                                 <td><label class="control-label">Package *</label></td>
-                                <td><input class="form-control" ng-model="model.packageData.packages" uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items|filter: { type: 'PACKAGE' }|filter:$viewValue|limitTo:10" typeahead-input-formatter="model.itemLable($model)" typeahead-on-select="ui.getPackageItems($model);" ng-disabled="ui.mode !== 'EDIT'"></td>
+                                <td><input class="form-control" ng-model="model.packageData.packages" 
+                                           uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items|filter: { type: 'PACKAGE' }|filter:$viewValue|limitTo:10" 
+                                           typeahead-input-formatter="model.itemLable($model)"
+                                           typeahead-on-select="ui.getPackageItems($model);" ng-disabled="ui.mode !== 'EDIT'"></td>
                             </tr>
                             <tr>
-                                <td><label class="control-label">Service Item*</label></td>
-                                <td><input class="form-control" ng-model="model.packageData.item" uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items|filter: { type: 'SERVICE' }|filter:$viewValue|limitTo:10" typeahead-input-formatter="model.itemLable($model)" ng-disabled="ui.mode !== 'EDIT'"></td>
+                                <td><label class="control-label">Service Item *</label></td>
+                                <td><input class="form-control" ng-model="model.packageData.item" uib-typeahead="items.indexNo as (items.indexNo + ' - ' + items.name) for items in model.items|filter: { type: 'SERVICE' }|filter:$viewValue|limitTo:10" typeahead-input-formatter="model.itemLable($model)" ng-disabled="ui.mode !== 'EDIT'" typeahead-on-select="ui.selectPackageItem($model);" ></td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Time *</label></td>
+                                <td><input class="form-control" ng-model="model.packageData.time" ></td>
+                            </tr>
+                            <tr class="select-primary-row-table-header">
+                                <td colspan="2">ITEM DETAILS</td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">Total Time :</label></td>
+                                <td><input class="form-control" ng-model="model.packageData.totalTime" ng-disabled="true" ></td>
+                            </tr>
+                            <tr>
+                                <td><label class="control-label">No of Activities :</label></td>
+                                <td><input class="form-control" ng-model="model.packageData.count" ng-disabled="true"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -455,9 +487,10 @@
                         </div>
                         <table class="table-rounded">
                             <col style="width: 10%">
-                            <col style="width: 35%">
-                            <col style="width: 35%">
+                            <col style="width: 30%">
+                            <col style="width: 30%">
                             <col style="width: 20%">
+                            <col style="width: 10%">
                             <thead class="background-dark">
                                 <tr>
                                     <th>
@@ -469,6 +502,9 @@
                                     <th>
                                         <label>Item</label>
                                     </th>
+                                    <th>
+                                        <label>Time (hh:mm:ss)</label>
+                                    </th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -476,14 +512,16 @@
                         <div class="smart-scroll-y" style="height: calc(100vh - 152px);">
                             <table class="table-rounded">
                                 <col style="width: 10%">
-                                <col style="width: 35%">
-                                <col style="width: 35%">
+                                <col style="width: 30%">
+                                <col style="width: 30%">
                                 <col style="width: 20%">
+                                <col style="width: 10%">
                                 <tbody>
                                     <tr ng-repeat="packageItem in model.packageViewList">
                                         <td><label class="label label-default">{{packageItem.indexNo|fixedLength:5}}</label></td>
                                         <td>{{model.itemLable(packageItem.packages)}}</td>
                                         <td>{{model.itemLable(packageItem.item)}}</td>
+                                        <td>{{packageItem.time}}</td>
                                         <td class="text-right" ng-disabled="ui.mode !== 'EDIT'">
                                             <a class="btn btn-danger" ng-click="model.deletePackageItems(packageItem, $index);"><span class="glyphicon glyphicon-trash"></span></a>
                                         </td>
@@ -725,7 +763,7 @@
                                 <col style="width: 10%">
                                 <tbody>
                                     <tr ng-repeat="checkItem in model.itemCheckDetailList
-                                                | filter:{item:model.itemCheckData.item===null?'':model.itemCheckData.item} 
+                                        | filter:{item:model.itemCheckData.item===null?'':model.itemCheckData.item} 
                                         | filter:checkItemSearch === null?'': checkItemSearch
                                         | filter:{name:model.itemCheckData.name===null?'':model.itemCheckData.name} ">
                                         <td><label class="label label-default">{{checkItem.indexNo|fixedLength:5}}</label></td>

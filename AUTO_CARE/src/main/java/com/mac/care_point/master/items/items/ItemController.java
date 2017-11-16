@@ -29,6 +29,8 @@ public class ItemController {
 
     final String STOCK = "STOCK";
     final String NON_STOCK = "NON STOCK";
+    final String SERVICE = "SERVICE";
+    final String PACKAGE = "PACKAGE";
 
     @RequestMapping(method = RequestMethod.GET)
     public List<MItem> findAllItems() {
@@ -57,7 +59,12 @@ public class ItemController {
     
     @RequestMapping(value = "/stock-nonstock-item", method = RequestMethod.GET)
     public List<MItem> supplierItems() {
-        return itemService.getSupplierItem(STOCK,NON_STOCK);
+        return itemService.getItemTypeOrType(STOCK,NON_STOCK);
+    }
+   
+    @RequestMapping(value = "/activity-package-item", method = RequestMethod.GET)
+    public List<MItem> getActivtyAndPackage() {
+        return itemService.getItemTypeOrType(SERVICE,PACKAGE);
     }
 
     @RequestMapping(value = "/find-item-by-category/{category}/{packageCategory}", method = RequestMethod.GET)

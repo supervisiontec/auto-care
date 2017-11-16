@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.service.job_item;
+package com.mac.care_point.master.bay;
 
-import com.mac.care_point.service.job_item.model.TPackageItemDetail;
+import com.mac.care_point.master.bay.model.BayMain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
- * @author kavish manjitha
+ * @author 'Kasun Chamara'
  */
-public interface PackageItemRepostory extends JpaRepository<TPackageItemDetail, Integer>{
+public interface BayMainRepository extends JpaRepository<BayMain, Integer>{
     
 }

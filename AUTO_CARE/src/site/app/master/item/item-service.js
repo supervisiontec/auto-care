@@ -25,6 +25,10 @@
         this.loadPriceCategory = function () {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/priceCategory");
         };
+        
+        this.loadBayMain = function () {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/bay/get-bay-main");
+        };
 
         //load master files
         this.loadItem = function () {

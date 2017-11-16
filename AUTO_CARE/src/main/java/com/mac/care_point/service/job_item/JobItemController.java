@@ -5,7 +5,8 @@
  */
 package com.mac.care_point.service.job_item;
 
-import com.mac.care_point.master.items.items.model.MItemL;
+import com.mac.care_point.service.job_item.model.MItemL;
+import com.mac.care_point.service.job_item.model.TJobCardActivities;
 import com.mac.care_point.service.job_item.model.TJobItem;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
@@ -30,8 +31,6 @@ public class JobItemController {
     @Autowired
     private JobItemService jobItemService;
 
-    private final Integer BRANCH = 1;
-
     //for service selections
     @RequestMapping(value = "/find-all-item", method = RequestMethod.GET)
     public List<MItemL> findAllMItemL() {
@@ -43,7 +42,7 @@ public class JobItemController {
     public List<MItemL> getQuickSeacrhItem(@PathVariable String itemKey, @PathVariable Integer priceCategory) {
         return jobItemService.getQuickSeacrhItem(itemKey, priceCategory);
     }
-    
+
     @RequestMapping(value = "/quick-stock-item-non-stock-item/{itemKey}", method = RequestMethod.GET)
     public List<Object[]> getQuickSeacrhItemStockItem(@PathVariable String itemKey) {
         return jobItemService.getQuickSeacrhItemStockItem(itemKey);
@@ -55,7 +54,7 @@ public class JobItemController {
     }
 
     //for service selections
-    @RequestMapping(value = "/delete-job-items/{indexNo}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete-job-items/{indexNo}", method = RequestMethod.GET)
     public Integer deleteJobItem(@PathVariable Integer indexNo) {
         jobItemService.deleteJobItem(indexNo);
         return indexNo;
@@ -102,10 +101,24 @@ public class JobItemController {
     public TJobItem findTJobItemByIndexNo(@PathVariable Integer indexNo) {
         return jobItemService.findTJobItemByIndexNo(indexNo);
     }
-    
-    @RequestMapping(value = "/change-vehicle-price-category/{jobCard}",method = RequestMethod.GET)
-       public List<TJobItem> changeVehiclePriceCategory(@PathVariable Integer jobCard) {
+
+    @RequestMapping(value = "/change-vehicle-price-category/{jobCard}", method = RequestMethod.GET)
+    public List<TJobItem> changeVehiclePriceCategory(@PathVariable Integer jobCard) {
         return jobItemService.changeVehiclePriceCategory(jobCard);
     }
-    
+
+    @RequestMapping(value = "/get-job-activities/{jobCard}/{bay}", method = RequestMethod.GET)
+    public List<TJobCardActivities> getJobActivities(@PathVariable Integer jobCard,@PathVariable Integer bay) {
+        return jobItemService.getJobActivities(jobCard,bay);
+    }
+    @RequestMapping(value = "/get-job-all-activities/{jobCard}", method = RequestMethod.GET)
+    public List<TJobCardActivities> getJobAllActivities(@PathVariable Integer jobCard) {
+        return jobItemService.getJobAllActivities(jobCard);
+    }
+
+    @RequestMapping(value = "/save-job-activities", method = RequestMethod.POST)
+    public List<TJobCardActivities> saveActivity(@RequestBody List<TJobCardActivities> jobActivityList) {
+        return jobItemService.saveActivity(jobActivityList);
+    }
+
 }

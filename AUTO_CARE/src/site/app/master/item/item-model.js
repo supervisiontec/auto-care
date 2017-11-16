@@ -32,6 +32,8 @@
             packageViewList: [],
             itemCheckDetailList: [],
             priceCategoryDetailsList: [],
+            timeList: [],
+            bayList: [],
             selectedConsumableItem: {},
             selectedItem: {},
             consumableItemIsView: false,
@@ -91,6 +93,15 @@
                         .success(function (data) {
                             that.suppliers = data;
                         });
+                itemService.loadBayMain()
+                        .success(function (data) {
+                            that.bayList = data;
+                        });
+                this.timeList = [
+                    "00:00:30", "00:01:00", "00:10:00", "00:15:00", "00:20:00", "00:25:00", "00:30:00",
+                    "00:35:00", "00:40:00", "00:45:00", "00:50:00", "00:55:00", "01:00:00", "01:10:00",
+                    "01:20:00", "01:30:00", "01:40:00", "01:50:00", "02:00:00"
+                ];
 
 
                 this.loadConsumableItem();
@@ -214,7 +225,9 @@
                 itemService.savePackageItem(this.packageData)
                         .success(function (data) {
                             that.packageViewList.unshift(data);
-                            that.packageData = {};
+                            that.packageData.item = null;
+                            that.packageData.time = null;
+                            that.totalTimeCalac();
                             defer.resolve();
                         })
                         .error(function (data) {
@@ -229,6 +242,8 @@
                         .success(function (data) {
                             that.packageViewList = [];
                             that.packageViewList = data;
+                            that.totalTimeCalac();
+
                             defer.resolve();
                         })
                         .error(function () {
@@ -237,12 +252,41 @@
                         });
                 return defer.promise;
             },
+            totalTimeCalac: function () {
+                var timeToSec = 0;
+                var that = this;
+                angular.forEach(that.packageViewList, function (package) {
+                    var parts = package.time.split(":");
+                    var itemTime = (parts[0] * 3600) +
+                            (parts[1] * 60) +
+                            (+parts[2]);
+                    timeToSec += parseInt(itemTime);
+
+                });
+                var total = that.floorTime(timeToSec);
+                that.packageData.totalTime = total;
+                that.packageData.count = that.packageViewList.length;
+            }
+            , floorTime: function (milisecondsDiff) {
+                return [this.pad(Math.floor(milisecondsDiff / 3600) % 60),
+                    this.pad(Math.floor(milisecondsDiff / 60) % 60),
+                    this.pad(milisecondsDiff % 60)
+                ].join(":");
+            },
+            pad: function (num) {
+                if (num < 10) {
+                    return "0" + num;
+                } else {
+                    return "" + num;
+                }
+            },
             deletePackageItems: function (package, $index) {
                 var defer = $q.defer();
                 var that = this;
                 itemService.deletePackageItem(package.indexNo)
                         .success(function (data) {
                             that.packageViewList.splice($index, 1);
+                            that.totalTimeCalac();
                             defer.resolve();
                         })
                         .error(function (data) {
@@ -433,6 +477,26 @@
                 });
                 return item;
             },
+            timeLable: function (timePara) {
+                var lable = null;
+                angular.forEach(this.timeList, function (time) {
+                    if (time === timePara) {
+                        lable = time;
+                        return;
+                    }
+                });
+                return lable;
+            },
+            bayLable: function (bay) {
+                var lable = null;
+                angular.forEach(this.bayList, function (bayDeiatl) {
+                    if (bay === parseInt(bayDeiatl.indexNo)) {
+                        lable = bayDeiatl.indexNo+" - "+bayDeiatl.name;
+                        return;
+                    }
+                });
+                return lable;
+            },
             item: function (indexNo) {
                 var item;
                 angular.forEach(this.items, function (value) {
@@ -442,7 +506,8 @@
                     }
                 });
                 return item;
-            },
+            }
+            ,
             selectedItemForCheckItem: function (indexNo) {
                 var item;
                 angular.forEach(this.items, function (value) {
@@ -453,7 +518,8 @@
                 });
                 this.selectedItem = item;
                 this.selectedItemIsView = true;
-            },
+            }
+            ,
             // ------------ price category details ------------
             loadPriceCategoryDetailByItem: function (item) {
                 var that = this;
@@ -461,18 +527,23 @@
 
                 //select item data
                 that.tempItemData = that.item(item);
+                if (that.tempItemData.type === 'PACKAGE' || that.tempItemData.type === 'SERVICE') {
 
-                itemService.loadPriceCategoryDetailByItem(item)
-                        .success(function (data) {
-                            that.priceCategoryDetailsList = [];
-                            that.priceCategoryDetailsList = data;
-                            defer.resolve();
-                        })
-                        .error(function () {
-                            that.priceCategoryDetailsList = [];
-                            defer.reject();
-                        });
-                return defer.promise;
+                    itemService.loadPriceCategoryDetailByItem(item)
+                            .success(function (data) {
+                                that.priceCategoryDetailsList = [];
+                                that.priceCategoryDetailsList = data;
+                                defer.resolve();
+                            })
+                            .error(function () {
+                                that.priceCategoryDetailsList = [];
+                                defer.reject();
+                            });
+                    return defer.promise;
+                } else {
+                    that.priceCategoryDetail.item = "";
+                    Notification.error('select Package Item or Activity to save price category !');
+                }
             },
             savePriceCategoryDetail: function () {
                 var that = this;
@@ -514,6 +585,9 @@
             editePriceCategoryDetail: function (priceCategoryDetail, $index) {
                 this.priceCategoryDetail = priceCategoryDetail;
                 this.priceCategoryDetailsList.splice($index, 1);
+            },
+            selectPackageItem: function (index) {
+                this.packageData.time = this.item(index).time;
             }
         };
         return itemModel;

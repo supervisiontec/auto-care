@@ -17,5 +17,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PackageItemRepository extends JpaRepository<MPackageItem, Serializable>{
 
     public List<MPackageItem> findByPackages(Integer indexNo);
-    
+
 }

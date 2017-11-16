@@ -88,6 +88,8 @@ public class JobCardService {
             jobCard.setBay(2);//branch default bay
 
             getSaveData = jobCardRepository.save(jobCard);
+            
+            
 
             //check allrady exsist data
             List<TJobVehicleAttenctions> getJobCardData = jobVehicleAttenctionsRepository.findByJobCard(getSaveData.getIndexNo());

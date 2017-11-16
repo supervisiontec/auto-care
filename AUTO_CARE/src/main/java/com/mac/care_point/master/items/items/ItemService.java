@@ -128,7 +128,7 @@ public class ItemService {
         return itemRepository.findByType(TYPE);
     }
 
-    public List<MItem> getSupplierItem(String stock, String nonStock) {
+    public List<MItem> getItemTypeOrType(String stock, String nonStock) {
         return itemRepository.findByTypeOrType(stock, nonStock);
     }
 

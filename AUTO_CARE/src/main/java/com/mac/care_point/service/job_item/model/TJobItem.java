@@ -5,6 +5,7 @@
  */
 package com.mac.care_point.service.job_item.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_job_item")
-public class TJobItem {
+public class TJobItem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

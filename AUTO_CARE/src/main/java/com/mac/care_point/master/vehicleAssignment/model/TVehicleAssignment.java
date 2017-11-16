@@ -52,10 +52,17 @@ public class TVehicleAssignment implements Serializable {
     @Column(name = "bay")
     private Integer bay;
 
+    @Column(name = "time_stop")
+    private boolean timeStop;
+
     public TVehicleAssignment() {
     }
 
-    public TVehicleAssignment(Integer indexNo, String inTime, String outTime, Integer branch, Date date, Integer jobCard, Integer bay) {
+    public TVehicleAssignment(String outTime) {
+        this.outTime = outTime;
+    }
+
+    public TVehicleAssignment(Integer indexNo, String inTime, String outTime, Integer branch, Date date, Integer jobCard, Integer bay, boolean timeStop) {
         this.indexNo = indexNo;
         this.inTime = inTime;
         this.outTime = outTime;
@@ -63,6 +70,7 @@ public class TVehicleAssignment implements Serializable {
         this.date = date;
         this.jobCard = jobCard;
         this.bay = bay;
+        this.timeStop = timeStop;
     }
 
     public Integer getIndexNo() {
@@ -119,6 +127,14 @@ public class TVehicleAssignment implements Serializable {
 
     public void setBay(Integer bay) {
         this.bay = bay;
+    }
+
+    public boolean getTimeStop() {
+        return timeStop;
+    }
+
+    public void setTimeStop(boolean timeStop) {
+        this.timeStop = timeStop;
     }
 
 }

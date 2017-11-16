@@ -1,21 +1,5 @@
 @import "mixins/variables.scss";
 
-/*.grid{
-
-    .tile{
-        display: block;
-        background: blue;
-    }
-
-    .w-1{
-        width: 10%;
-    }
-
-    .h-1{
-        height: 10%;
-    }
-
-}*/
 
 .grid{
     position: relative;
@@ -38,7 +22,7 @@
             background-color: $bg-dark-color;
             height: 40px;
 
-            h4{
+            h5{
                 transform: translate( 0,50%);
                 margin: 0px;
             }

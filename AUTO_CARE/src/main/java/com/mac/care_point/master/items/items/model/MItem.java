@@ -88,11 +88,23 @@ public class MItem implements Serializable {
 
     @Column(name = "qty_wise")
     private Boolean qtyWise;
+    
+    @Column(name = "time")
+    private String time;
+    
+    @Column(name = "bay")
+    private Integer bay;
+    
+    @Column(name = "`account`")
+    private Integer account;
+    
+    @Column(name = "master_item")
+    private Integer masterItem;
 
     public MItem() {
     }
 
-    public MItem(Integer indexNo, String name, String barcode, String printDescription, String unit, String type, Integer department, Integer brand, Integer category, Integer itemCategory, Integer sub_category, BigDecimal costPrice, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Integer supplier, BigDecimal reOrderMax, BigDecimal reOrderMin, BigDecimal discount, BigDecimal supplierPrice, Boolean qtyWise) {
+    public MItem(Integer indexNo, String name, String barcode, String printDescription, String unit, String type, Integer department, Integer brand, Integer category, Integer itemCategory, Integer sub_category, BigDecimal costPrice, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Integer supplier, BigDecimal reOrderMax, BigDecimal reOrderMin, BigDecimal discount, BigDecimal supplierPrice, Boolean qtyWise, String time, Integer bay, Integer account, Integer masterItem) {
         this.indexNo = indexNo;
         this.name = name;
         this.barcode = barcode;
@@ -114,6 +126,10 @@ public class MItem implements Serializable {
         this.discount = discount;
         this.supplierPrice = supplierPrice;
         this.qtyWise = qtyWise;
+        this.time = time;
+        this.bay = bay;
+        this.account = account;
+        this.masterItem = masterItem;
     }
 
     public Integer getIndexNo() {
@@ -284,4 +300,35 @@ public class MItem implements Serializable {
         this.qtyWise = qtyWise;
     }
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    } 
+
+    public Integer getBay() {
+        return bay;
+    }
+
+    public void setBay(Integer bay) {
+        this.bay = bay;
+    }
+
+    public Integer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Integer account) {
+        this.account = account;
+    }
+
+    public Integer getMasterItem() {
+        return masterItem;
+    }
+
+    public void setMasterItem(Integer masterItem) {
+        this.masterItem = masterItem;
+    }
 }

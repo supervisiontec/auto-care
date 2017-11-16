@@ -7,6 +7,7 @@ package com.mac.care_point.master.bay;
 
 import com.mac.care_point.master.bay.model.Bay;
 import com.mac.care_point.master.bay.BayRepository;
+import com.mac.care_point.master.bay.model.BayMain;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 public class BayService {
-    
-     @Autowired
+
+    @Autowired
     private BayRepository repository;
+
+    @Autowired
+    private BayMainRepository bayMainRepository;
 
     public List<Bay> findAll() {
         return repository.findAll();
     }
-     public Bay findByName(String name) {
+
+    public Bay findByName(String name) {
         List<Bay> departmentList = repository.findByName(name);
         if (departmentList.isEmpty()) {
             return null;
@@ -39,7 +44,6 @@ public class BayService {
         Bay findByName = findByName(model.getName());
 
         if (findByName == null || findByName.getIndexNo().equals(model.getIndexNo())) {//is'nt already exsist by name
-        System.out.println("bay service");
             return repository.save(model);
         } else {//is already exsist by name  
             throw new RuntimeException("duplicate");
@@ -50,12 +54,16 @@ public class BayService {
         repository.delete(indexNo);
     }
 
-    List<Bay> findByBranchAndBayIsView(Integer branch, Integer isView) {
-        return repository.findByBranchAndBayIsView(branch,isView);
+    public List<Bay> findByBranchAndBayIsView(Integer branch, Integer isView) {
+        return repository.findByBranchAndBayIsView(branch, isView);
     }
 
-    List<Bay> findByBranchAndEmployeeIsView(Integer branch, Integer isView) {
-         return repository.findByBranchAndEmployeeIsView(branch,isView);
+    public List<Bay> findByBranchAndEmployeeIsView(Integer branch, Integer isView) {
+        return repository.findByBranchAndEmployeeIsView(branch, isView);
     }
-    
+
+    public List<BayMain> getBayMain() {
+        return bayMainRepository.findAll();
+    }
+
 }

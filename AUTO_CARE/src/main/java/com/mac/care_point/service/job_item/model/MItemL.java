@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mac.care_point.master.items.items.model;
+package com.mac.care_point.service.job_item.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -70,11 +70,14 @@ public class MItemL implements Serializable {
 
     @Column(name = "qty_wise")
     private Boolean qtyWise;
+   
+    @Column(name = "time")
+    private String time;
 
     public MItemL() {
     }
 
-    public MItemL(Integer indexNo, String name, String barcode, String type, Integer category, Integer itemCategory, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Boolean qtyWise) {
+    public MItemL(Integer indexNo, String name, String barcode, String type, Integer category, Integer itemCategory, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Boolean qtyWise, String time) {
         this.indexNo = indexNo;
         this.name = name;
         this.barcode = barcode;
@@ -85,6 +88,7 @@ public class MItemL implements Serializable {
         this.salePriceRegister = salePriceRegister;
         this.priceCategory = priceCategory;
         this.qtyWise = qtyWise;
+        this.time = time;
     }
 
     public Integer getIndexNo() {
@@ -166,5 +170,15 @@ public class MItemL implements Serializable {
     public void setQtyWise(Boolean qtyWise) {
         this.qtyWise = qtyWise;
     }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    
 
 }

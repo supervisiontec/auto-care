@@ -6,6 +6,7 @@
 package com.mac.care_point.master.bay;
 
 import com.mac.care_point.master.bay.model.Bay;
+import com.mac.care_point.master.bay.model.BayMain;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class BayController {
     @RequestMapping(value = "/get-bays-by-branch-is-view",method = RequestMethod.GET)
     public List<Bay> findByBranchIsView() {
         return bayService.findByBranchAndBayIsView(SecurityUtil.getCurrentUser().getBranch(),1);
+    }
+    
+    @RequestMapping(value = "/get-bay-main",method = RequestMethod.GET)
+    public List<BayMain> getBayMain() {
+        return bayService.getBayMain();
     }
    
     @RequestMapping(value = "/get-bays-by-branch-employee-is-view",method = RequestMethod.GET)

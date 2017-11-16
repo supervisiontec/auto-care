@@ -77,7 +77,7 @@
                                                 Notification.error("Item save Fail");
                                             });
                                 })
-                                .discard(function () {
+                                .discard(function () {f
                                     console.log('discard');
                                 });
                     }
@@ -296,6 +296,9 @@
                             .discard(function () {
                                 console.log('discard fail');
                             });
+                };
+                $scope.ui.selectPackageItem=function (model){
+                    $scope.model.selectPackageItem(model);
                 };
 
                 //init
