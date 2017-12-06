@@ -30,23 +30,19 @@ public class MPackageItem implements Serializable {
     @Column(name = "index_no")
     private Integer indexNo;
 
-    @Column(name = "package")
+    @Column(name = "`package`")
     private Integer packages;
 
     @Column(name = "item")
     private Integer item;
-    
-    @Column(name = "time")
-    private String time;
 
     public MPackageItem() {
     }
 
-    public MPackageItem(Integer indexNo, Integer packages, Integer item, String time) {
+    public MPackageItem(Integer indexNo, Integer packages, Integer item) {
         this.indexNo = indexNo;
         this.packages = packages;
         this.item = item;
-        this.time = time;
     }
 
     public Integer getIndexNo() {
@@ -73,13 +69,4 @@ public class MPackageItem implements Serializable {
         this.item = item;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-   
 }

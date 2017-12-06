@@ -13,7 +13,7 @@
             packageData: {},
             consumableData: {},
             itemCheckData: {},
-            priceCategoryDetails: {},
+            priceCategoryDetail: {},
             //uib-typeahead
             items: [],
             itemsTypeWiseItems: [],
@@ -36,6 +36,7 @@
             bayList: [],
             selectedConsumableItem: {},
             selectedItem: {},
+            selectedItemFromPriceCategory: {},
             consumableItemIsView: false,
             selectedItemIsView: false,
             //constructor
@@ -48,7 +49,7 @@
                 that.packageUnitData = itemFactory.newPackageData();
                 that.consumableData = itemFactory.newConsumableData();
                 that.itemCheckData = itemFactory.newItemCheckData();
-                that.priceCategoryDetails = itemFactory.newPriceCategoryDetails();
+                that.priceCategoryDetail = itemFactory.newPriceCategoryDetails();
 
                 itemService.loadItem()
                         .success(function (data) {
@@ -253,33 +254,22 @@
                 return defer.promise;
             },
             totalTimeCalac: function () {
-                var timeToSec = 0;
-                var that = this;
-                angular.forEach(that.packageViewList, function (package) {
-                    var parts = package.time.split(":");
-                    var itemTime = (parts[0] * 3600) +
-                            (parts[1] * 60) +
-                            (+parts[2]);
-                    timeToSec += parseInt(itemTime);
-
-                });
-                var total = that.floorTime(timeToSec);
-                that.packageData.totalTime = total;
+              var that=this;  
                 that.packageData.count = that.packageViewList.length;
-            }
-            , floorTime: function (milisecondsDiff) {
-                return [this.pad(Math.floor(milisecondsDiff / 3600) % 60),
-                    this.pad(Math.floor(milisecondsDiff / 60) % 60),
-                    this.pad(milisecondsDiff % 60)
-                ].join(":");
             },
-            pad: function (num) {
-                if (num < 10) {
-                    return "0" + num;
-                } else {
-                    return "" + num;
-                }
-            },
+//            , floorTime: function (milisecondsDiff) {
+//                return [this.pad(Math.floor(milisecondsDiff / 3600) % 60),
+//                    this.pad(Math.floor(milisecondsDiff / 60) % 60),
+//                    this.pad(milisecondsDiff % 60)
+//                ].join(":");
+//            },
+//            pad: function (num) {
+//                if (num < 10) {
+//                    return "0" + num;
+//                } else {
+//                    return "" + num;
+//                }
+//            },
             deletePackageItems: function (package, $index) {
                 var defer = $q.defer();
                 var that = this;
@@ -528,6 +518,12 @@
                 //select item data
                 that.tempItemData = that.item(item);
                 if (that.tempItemData.type === 'PACKAGE' || that.tempItemData.type === 'SERVICE') {
+                    angular.forEach(that.items,function (data){
+                        if (data.indexNo===item) {
+                            that.selectedItemFromPriceCategory=data;
+                            return ;
+                        }
+                    });
 
                     itemService.loadPriceCategoryDetailByItem(item)
                             .success(function (data) {
@@ -541,6 +537,7 @@
                             });
                     return defer.promise;
                 } else {
+                    that.selectedItemFromPriceCategory=null;
                     that.priceCategoryDetail.item = "";
                     Notification.error('select Package Item or Activity to save price category !');
                 }
@@ -552,6 +549,7 @@
                         .success(function (data) {
                             that.priceCategoryDetailsList.unshift(data);
                             that.priceCategoryDetail = {};
+                            that.tempItemData = {};
                             defer.resolve();
                         })
                         .error(function () {

@@ -28,28 +28,32 @@ public class MPriceCategoryDetails implements Serializable {
     @Basic(optional = false)
     @Column(name = "index_no")
     private Integer indexNo;
-    
+
     @Column(name = "price_category")
     private Integer priceCategory;
-    
+
     @Column(name = "item")
     private Integer item;
-    
+
     @Column(name = "normal_price")
     private BigDecimal normalPrice;
-    
+
     @Column(name = "register_price")
     private BigDecimal registerPrice;
+
+    @Column(name = "time")
+    private String time;
 
     public MPriceCategoryDetails() {
     }
 
-    public MPriceCategoryDetails(Integer indexNo, Integer priceCategory, Integer item, BigDecimal normalPrice, BigDecimal registerPrice) {
+    public MPriceCategoryDetails(Integer indexNo, Integer priceCategory, Integer item, BigDecimal normalPrice, BigDecimal registerPrice, String time) {
         this.indexNo = indexNo;
         this.priceCategory = priceCategory;
         this.item = item;
         this.normalPrice = normalPrice;
         this.registerPrice = registerPrice;
+        this.time = time;
     }
 
     public Integer getIndexNo() {
@@ -91,5 +95,13 @@ public class MPriceCategoryDetails implements Serializable {
     public void setRegisterPrice(BigDecimal registerPrice) {
         this.registerPrice = registerPrice;
     }
-    
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
 }

@@ -89,8 +89,8 @@ public class MItem implements Serializable {
     @Column(name = "qty_wise")
     private Boolean qtyWise;
     
-    @Column(name = "time")
-    private String time;
+    @Column(name = "bay2")
+    private Integer bay2;
     
     @Column(name = "bay")
     private Integer bay;
@@ -104,7 +104,7 @@ public class MItem implements Serializable {
     public MItem() {
     }
 
-    public MItem(Integer indexNo, String name, String barcode, String printDescription, String unit, String type, Integer department, Integer brand, Integer category, Integer itemCategory, Integer sub_category, BigDecimal costPrice, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Integer supplier, BigDecimal reOrderMax, BigDecimal reOrderMin, BigDecimal discount, BigDecimal supplierPrice, Boolean qtyWise, String time, Integer bay, Integer account, Integer masterItem) {
+    public MItem(Integer indexNo, String name, String barcode, String printDescription, String unit, String type, Integer department, Integer brand, Integer category, Integer itemCategory, Integer sub_category, BigDecimal costPrice, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Integer supplier, BigDecimal reOrderMax, BigDecimal reOrderMin, BigDecimal discount, BigDecimal supplierPrice, Boolean qtyWise, Integer bay2, Integer bay, Integer account, Integer masterItem) {
         this.indexNo = indexNo;
         this.name = name;
         this.barcode = barcode;
@@ -126,10 +126,18 @@ public class MItem implements Serializable {
         this.discount = discount;
         this.supplierPrice = supplierPrice;
         this.qtyWise = qtyWise;
-        this.time = time;
+        this.bay2 = bay2;
         this.bay = bay;
         this.account = account;
         this.masterItem = masterItem;
+    }
+
+    public Integer getBay2() {
+        return bay2;
+    }
+
+    public void setBay2(Integer bay2) {
+        this.bay2 = bay2;
     }
 
     public Integer getIndexNo() {
@@ -299,14 +307,6 @@ public class MItem implements Serializable {
     public void setQtyWise(Boolean qtyWise) {
         this.qtyWise = qtyWise;
     }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    } 
 
     public Integer getBay() {
         return bay;

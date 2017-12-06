@@ -92,7 +92,8 @@ public class JobItemService {
         MItemL mItemL = mItemLRepository.findOne(jobItem.getItem());
         if ("SERVICE".equals(mItemL.getType())) {
             TJobCardActivities tJobCardActivities = new TJobCardActivities();
-            tJobCardActivities.setActivityTime(mItemL.getTime());
+            String time=jobCardActivitiesRepository.getTimeByPriceCategory(jobItem.getItem(),jobItem.getJobCard());
+            tJobCardActivities.setActivityTime(time);
             tJobCardActivities.setItem(jobItem.getItem());
             tJobCardActivities.setJobCard(jobItem.getJobCard());
             tJobCardActivities.setUsed(false);
@@ -104,7 +105,8 @@ public class JobItemService {
             List<MPackageItem> packageList = packageItemRepository.findByPackages(jobItem.getItem());
             for (MPackageItem mPackageItem : packageList) {
                 TJobCardActivities tJobCardActivities = new TJobCardActivities();
-                tJobCardActivities.setActivityTime(mPackageItem.getTime());
+                String time=jobCardActivitiesRepository.getTimeByPriceCategory(mPackageItem.getItem(),jobItem.getJobCard());
+                tJobCardActivities.setActivityTime(time);
                 tJobCardActivities.setItem(mPackageItem.getItem());
                 tJobCardActivities.setJobCard(jobItem.getJobCard());
                 tJobCardActivities.setUsed(false);

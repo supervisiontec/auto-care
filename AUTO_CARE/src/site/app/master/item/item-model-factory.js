@@ -101,7 +101,8 @@
                         "item": null,
                         "priceCategory": null,
                         "normalPrice": null,
-                        "registerPrice": null
+                        "registerPrice": null,
+                        "time": null
                     };
                     return priceCategoryDetail;
                 };

@@ -125,9 +125,7 @@ public class VehicleAssignmentService {
                 employeeBayDetail.setEmployee(employee.getEmployee());
                 employeeBayRepository.save(employeeBayDetail);
             }
-        } else {
-            //nothing to do
-        }
+        } 
     }
 
     boolean checkEmployeAssign(Integer bay, Integer branch, Date date) {
@@ -189,7 +187,6 @@ public class VehicleAssignmentService {
             tVehicleAssignment.setInTime(vehicleAssignmentList.get(0).getInTime());
         }
         String flatRate=activitiesRepository.findByFlatRateFromJobCard(jobIndex,bay);
-        System.out.println(flatRate);
         tVehicleAssignment.setOutTime(flatRate);
         return tVehicleAssignment;
         

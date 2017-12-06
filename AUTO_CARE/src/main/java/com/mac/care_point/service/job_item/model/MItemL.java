@@ -71,13 +71,21 @@ public class MItemL implements Serializable {
     @Column(name = "qty_wise")
     private Boolean qtyWise;
    
-    @Column(name = "time")
-    private String time;
-
+    @Column(name = "bay2")
+    private Integer bay2;
+    
+    @Column(name = "bay")
+    private Integer bay;
+    
+    @Column(name = "`account`")
+    private Integer account;
+    
+    @Column(name = "master_item")
+    private Integer masterItem;
     public MItemL() {
     }
 
-    public MItemL(Integer indexNo, String name, String barcode, String type, Integer category, Integer itemCategory, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Boolean qtyWise, String time) {
+    public MItemL(Integer indexNo, String name, String barcode, String type, Integer category, Integer itemCategory, BigDecimal salePriceNormal, BigDecimal salePriceRegister, Integer priceCategory, Boolean qtyWise, Integer bay2, Integer bay, Integer account, Integer masterItem) {
         this.indexNo = indexNo;
         this.name = name;
         this.barcode = barcode;
@@ -88,8 +96,13 @@ public class MItemL implements Serializable {
         this.salePriceRegister = salePriceRegister;
         this.priceCategory = priceCategory;
         this.qtyWise = qtyWise;
-        this.time = time;
+        this.bay2 = bay2;
+        this.bay = bay;
+        this.account = account;
+        this.masterItem = masterItem;
     }
+
+   
 
     public Integer getIndexNo() {
         return indexNo;
@@ -171,13 +184,39 @@ public class MItemL implements Serializable {
         this.qtyWise = qtyWise;
     }
 
-    public String getTime() {
-        return time;
+    public Integer getBay2() {
+        return bay2;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setBay2(Integer bay2) {
+        this.bay2 = bay2;
     }
+
+    public Integer getBay() {
+        return bay;
+    }
+
+    public void setBay(Integer bay) {
+        this.bay = bay;
+    }
+
+    public Integer getAccount() {
+        return account;
+    }
+
+    public void setAccount(Integer account) {
+        this.account = account;
+    }
+
+    public Integer getMasterItem() {
+        return masterItem;
+    }
+
+    public void setMasterItem(Integer masterItem) {
+        this.masterItem = masterItem;
+    }
+
+    
 
     
 

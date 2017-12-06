@@ -333,11 +333,9 @@
                     });
                 };
                 $scope.openModel = function () {
-                    console.log($scope.model.jobAssignment.jobCard.indexNo);
-                    console.log($scope.model.jobAssignment.bay.indexNo);
                     bayAssignmentFactory.getJobActivities(
                             $scope.model.jobAssignment.jobCard.indexNo,
-                            $scope.model.jobAssignment.bay.indexNo,
+                            $scope.model.jobAssignment.bay.mainBay,
                             function (data) {
                                 $scope.model.activityList = data;
                             });
@@ -389,10 +387,10 @@
 
                     if (check) {
                         var total = $scope.totalTime(timeToSec);
-                        Notification.success(total);
                         $scope.ui.modelCancel();
                         $scope.model.jobAssignment.bay.timeout = 5;
                         $scope.onTimeout();
+                        Notification.success(total);
                     } else {
                         Notification.error('Select a activity to assing bay !');
                     }
@@ -655,8 +653,8 @@
                                 });
 
                             });
-                            
-                            
+
+
                             bayAssignmentFactory.loadVehicles(function (data) {
                                 $scope.model.vehicles = data;
                             });
