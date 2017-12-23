@@ -14,7 +14,8 @@
         <div class="smart-scroll-y" style="height: calc(100vh - 126px);">
             <div class="tile tile-155" style="animation: 0.5s zoomInLeft" ng-repeat="details in model.pendingJobCards|filter:{vehicleNo:search}" ng-class="{'selected':details.indexNo == selectedJobCardIndexNo}" ng-click="ui.selectedJobCardRow(details);">
                 <span> 
-                    <img src="/img/01.png"/>  
+                    <!--<img src="/img/01.png"/>-->  
+                    <img src="../../../img/05.png"/>  
                     <label>{{model.vehicleData(details.vehicle).vehicleNo}}</label>
                     <label ng-show="model.vehicleData(details.vehicle).type === 'NORMAL'" class="label label-primary">NORMAL</label>
                     <label ng-show="model.vehicleData(details.vehicle).type === 'REGISTER'" class="label label-success">REGISTER</label>

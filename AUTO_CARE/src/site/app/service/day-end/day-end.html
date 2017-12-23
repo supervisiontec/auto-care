@@ -1,0 +1,228 @@
+<div class="index-content-header"></div>
+
+<div class="index-content-body ">
+
+    <div class="col-xs-3 background-dark">
+        <div class="row" style="display: flex; flex-flow: column; height: calc(100vh - 53px);padding: 5px">
+            <div class="col-xs-12 nopadding" style="flex: 0 0 auto;padding-right: 22px;" >
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <tbody>
+                        <tr>
+                            <td>
+                    <center>
+                        <label class="h4">
+                            <b>END OF THE DAY </b>
+                        </label>
+                    </center>
+                    </td>
+                    </tr>
+                    </tbody>
+                </table> 
+            </div>
+
+            <div class="row col-xs-12 nopadding" style="flex: 0 0 auto;">
+                <table class="table-rounded control-table square-table">
+                    <col style="width: 30%"/>
+                    <col style="width: 60%"/>
+                    <col style="width: 10%"/>
+                    <tbody>
+                        <tr>
+                            <td><span class=" text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Date :</span>
+                            </td>
+                            <td><input class="form-control" type="date"  placeholder="" ng-model="model.data.date" ng-disabled="ui.mode !== 'NEW'"></td>
+                            <td><span class="glyphicon glyphicon-import text-primary" ng-click="ui.loadNumberMap()"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-rounded control-table">
+                    <col style="width: 50%"/>
+                    <col style="width: 40%"/>
+                    <col style="width: 10%"/>
+                    <tbody>
+                        <tr>
+                            <td><span class=" text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Gross Sales :</span>
+                            </td>
+                            <td><input class="form-control text-right" smart-input="decimal"  placeholder="" ng-model="model.data.grossSales|number:2" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class=" text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Discount :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.discount|number:2" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class=" text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Net Sales :</span>
+                            </td>
+                            <td><input class="form-control text-right" smart-input="decimal" placeholder="" ng-model="model.data.netSales|number:2" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-rounded control-table">
+                    <col style="width: 50%"/>
+                    <col style="width: 40%"/>
+                    <col style="width: 10%"/>
+                    <tbody>
+
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Cash Received :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.cashReceived" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Card Received :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.cardReceived" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Cheque Received :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.chequeReceived" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Debit Amount :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.debitAmount" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Over Payment :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.overPayment" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="text-capitalize" style="font-weight: 300; font-size: 15px">
+                                    Other Income :</span>
+                            </td>
+                            <td><input class="form-control text-right"  smart-input="decimal" placeholder="" ng-model="model.data.otherIncome" ng-disabled="true"></td>
+                            <td><span class="glyphicon glyphicon-arrow-right text-primary"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-9 background-dark" style="padding-top: 10px">
+        <div class="row col-xs-12 nopadding">
+            <div class="col-md-3 col-sm-6 col-xs-12 nopadding">
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-usd "></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">today activity</span>
+                        <span class="info-box-number">{{model.map['todayActivity']|number:2}}</span>
+                        <span class="info-box-text">upto date</span>
+                        <span class="info-box-number">{{model.map['uptoDate']|number:2}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 nopadding">
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><img src="../../../img/05.png"/></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">No of vehicle</span>
+                        <span class="info-box-number" style="padding-top: 10px"><i class="glyphicon glyphicon-align-justify text-primary">&nbsp;</i>{{model.map['noOfVehicle']}}<i class="glyphicon glyphicon-ok text-success"style="padding-left: 15px"></i>&nbsp;{{model.map['noOfVehicleFinished']}}</span>
+                        <span class="info-box-number" style="padding-top: 10px"><i class="glyphicon glyphicon-refresh text-warning">&nbsp;</i>{{model.map['noOfVehiclePending']}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 nopadding">
+                <div class="info-box">
+                    <span class="info-box-icon bg-green"><i class="glyphicon glyphicon-user"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">worker count</span>
+                        <span class="info-box-number" style="font-size: 30px;">&nbsp;&nbsp;{{model.map['workerCount']}}</span>
+                        <span class="info-box-number"></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12 nopadding">
+                <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="glyphicon glyphicon-thumbs-up "></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Satisfaction</span>
+                        <span class="info-box-number" style="padding-top: 10px"><i class="glyphicon glyphicon-align-justify text-primary"></i>&nbsp;{{model.map['saticfactionAll']}} <i class="glyphicon glyphicon-arrow-up text-primary"style="padding-left: 15px"></i>&nbsp;{{model.map['saticfactionUp']}}</span>
+                        <span class="info-box-number" style="padding-top: 10px"><i class="glyphicon glyphicon-arrow-down text-danger"></i>&nbsp;{{model.map['saticfactionDown']}}<i class="glyphicon glyphicon-refresh text-warning"style="padding-left: 15px"></i>&nbsp;{{model.map['saticfactionPending']}}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-9" ng-show="model.data.transferItemList.length">
+
+        <table class="table-rounded " >
+            <col style="width: 15%"/>
+            <col style="width: 45%"/>
+            <col style="width: 15%"/>
+            <col style="width: 15%"/>
+            <col style="width: 10%"/>
+
+            <thead class="background-dark">
+                <tr>
+                    <th>Barcode</th>
+                    <th>Description</th>
+                    <th class="text-right">Qty</th>
+                    <th></th>
+                    <th>Check</th>
+                </tr>
+            </thead>
+        </table>
+        <div class="smart-scroll-y" style="height: calc(100vh - 245px);">
+            <table class="table-rounded">
+                <col style="width: 15%"/>
+                <col style="width: 45%"/>
+                <col style="width: 15%"/>
+                <col style="width: 15%"/>
+                <tbody>
+                    <tr class="background-dark" ng-repeat="unit in model.data.transferItemList">
+                        <td><span class="label label-default">{{model.getItemBarcode(unit.item)}}</span></td>
+                        <td class="over-flow-hidden">{{model.getItemDescription(unit.item)}}</td>
+                        <td class="text-right">{{unit.qty| number:2}}</td>
+                        <td></td>
+                        <td>
+                            <a class="btn btn-warning" ng-hide="unit.status" ng-click="ui.unitCheck($index)"><span class="glyphicon glyphicon-question-sign"></span></a>
+                            <a class="btn btn-success" ng-show="unit.status" ng-click="ui.unitUncheck($index)"><span class="glyphicon glyphicon-ok"></span></a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="placeholder col-md-9" ng-hide="model.data.transferItemList.length" style="height: calc(100vh - 185px); padding: 0px 10px 10px 10px;">
+        <h1>CHEQUE DETAILS EMPTY :(</h1>
+    </div>
+</div>
+
+<div class="fab-container">
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'IDEAL'" ng-click="ui.new();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-lg fab-primary" ng-show="ui.mode === 'NEW'" ng-click="ui.save();"><i class="glyphicon glyphicon-ok"></i></a>
+</div>

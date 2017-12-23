@@ -20,9 +20,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_job_activities")
-public class TJobCardActivities implements Serializable{
-    
-     @Id
+public class TJobCardActivities implements Serializable {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "index_no")
@@ -30,34 +30,33 @@ public class TJobCardActivities implements Serializable{
 
     @Column(name = "activity_time")
     private String activityTime;
-    
+
     @Column(name = "item")
     private Integer item;
 
     @Column(name = "job_card")
     private Integer jobCard;
-    
+
     @Column(name = "job_item")
     private Integer jobItem;
-    
+
     @Column(name = "used")
     private Boolean used;
-   
-    @Column(name = "bay")
-    private Integer bay;
-   
-    
+
+    @Column(name = "vehicle_assignment")
+    private Integer vehicleAssignment;
+
     public TJobCardActivities() {
     }
 
-    public TJobCardActivities(Integer indexNo, String activityTime, Integer item, Integer jobCard, Integer jobItem, Boolean used, Integer bay) {
+    public TJobCardActivities(Integer indexNo, String activityTime, Integer item, Integer jobCard, Integer jobItem, Boolean used, Integer vehicleAssignment) {
         this.indexNo = indexNo;
         this.activityTime = activityTime;
         this.item = item;
         this.jobCard = jobCard;
         this.jobItem = jobItem;
         this.used = used;
-        this.bay = bay;
+        this.vehicleAssignment = vehicleAssignment;
     }
 
     public Integer getIndexNo() {
@@ -108,13 +107,12 @@ public class TJobCardActivities implements Serializable{
         this.used = used;
     }
 
-    public Integer getBay() {
-        return bay;
+    public Integer getVehicleAssignment() {
+        return vehicleAssignment;
     }
 
-    public void setBay(Integer bay) {
-        this.bay = bay;
+    public void setVehicleAssignment(Integer vehicleAssignment) {
+        this.vehicleAssignment = vehicleAssignment;
     }
 
-   
 }

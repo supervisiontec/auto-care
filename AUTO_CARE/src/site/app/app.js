@@ -12,6 +12,7 @@
         "itemSalesModule",
         "bayItemIssueModule",
         "finalCheckListModule",
+        "dayEndModule",
         "customerSatisfactionModule",
         //pending
         "employeeAssignmentModule",
@@ -124,6 +125,10 @@
                         .when("/service/job-card-edit", {
                             templateUrl: "app/service/job-card-edit/job-card-edit.html",
                             controller: "jobCardEditController"
+                        })
+                        .when("/service/day-end", {
+                            templateUrl: "app/service/day-end/day-end.html",
+                            controller: "dayEndController"
                         })
 
                         //front-office

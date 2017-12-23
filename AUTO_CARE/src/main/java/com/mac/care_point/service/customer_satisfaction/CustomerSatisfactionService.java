@@ -24,14 +24,14 @@ public class CustomerSatisfactionService {
     @Autowired
     public CustomerSatisfactionRepository satisfactionRepository;
 
-    Integer save(CustomerSatisfaction customerSatisfaction) {
+    public Integer save(CustomerSatisfaction customerSatisfaction) {
         CustomerSatisfaction saveModel = satisfactionRepository.findOne(customerSatisfaction.getIndexNo());
         saveModel.setRate(customerSatisfaction.getRate());
         saveModel.setRateReason(customerSatisfaction.getRateReason());
         return satisfactionRepository.save(saveModel).getIndexNo();
     }
 
-    List<CustomerSatisfaction> getFinishedJobCard() {
-        return satisfactionRepository.findByDefaultFinalCheckAndInvoiceAndRateAndRateReasonAndStatus(true, true, 0, null, Constant.FINISHE_STATUS);
+    public List<CustomerSatisfaction> getFinishedJobCard() {
+        return satisfactionRepository.findByInvoiceAndRateAndRateReasonAndStatus(true, 0, null, Constant.FINISHE_STATUS);
     }
 }

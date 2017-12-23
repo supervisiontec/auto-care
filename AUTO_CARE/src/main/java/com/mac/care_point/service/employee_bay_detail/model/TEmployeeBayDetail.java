@@ -6,7 +6,6 @@
 package com.mac.care_point.service.employee_bay_detail.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -32,21 +29,12 @@ public class TEmployeeBayDetail implements Serializable {
     private Integer indexNo;
 
     @Basic(optional = false)
-    @Column(name = "job_card")
-    private Integer jobCard;
-
-    @Basic(optional = false)
-    @Column(name = "bay")
-    private Integer bay;
+    @Column(name = "vehicle_assignment")
+    private Integer vehicleAssignment;
 
     @Basic(optional = false)
     @Column(name = "employee")
     private Integer employee;
-
-    @Basic(optional = false)
-    @Column(name = "date")
-    @Temporal(TemporalType.DATE)
-    private Date date;
 
     @Basic(optional = false)
     @Column(name = "status")
@@ -65,24 +53,7 @@ public class TEmployeeBayDetail implements Serializable {
     @Column(name = "type_desc")
     private String typeDesc;
 
-    @Column(name = "branch")
-    private Integer branch;
-
     public TEmployeeBayDetail() {
-    }
-
-    public TEmployeeBayDetail(Integer indexNo, Integer jobCard, Integer bay, Integer employee, Date date, String status, String inTime, String outTime, String type, String typeDesc, Integer branch) {
-        this.indexNo = indexNo;
-        this.jobCard = jobCard;
-        this.bay = bay;
-        this.employee = employee;
-        this.date = date;
-        this.status = status;
-        this.inTime = inTime;
-        this.outTime = outTime;
-        this.type = type;
-        this.typeDesc = typeDesc;
-        this.branch = branch;
     }
 
     public Integer getIndexNo() {
@@ -93,20 +64,12 @@ public class TEmployeeBayDetail implements Serializable {
         this.indexNo = indexNo;
     }
 
-    public Integer getJobCard() {
-        return jobCard;
+    public Integer getVehicleAssignment() {
+        return vehicleAssignment;
     }
 
-    public void setJobCard(Integer jobCard) {
-        this.jobCard = jobCard;
-    }
-
-    public Integer getBay() {
-        return bay;
-    }
-
-    public void setBay(Integer bay) {
-        this.bay = bay;
+    public void setVehicleAssignment(Integer vehicleAssignment) {
+        this.vehicleAssignment = vehicleAssignment;
     }
 
     public Integer getEmployee() {
@@ -115,14 +78,6 @@ public class TEmployeeBayDetail implements Serializable {
 
     public void setEmployee(Integer employee) {
         this.employee = employee;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public String getStatus() {
@@ -164,14 +119,5 @@ public class TEmployeeBayDetail implements Serializable {
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
     }
-
-    public Integer getBranch() {
-        return branch;
-    }
-
-    public void setBranch(Integer branch) {
-        this.branch = branch;
-    }
-
 
 }

@@ -5,6 +5,8 @@
  */
 package com.mac.care_point.service.job_card;
 
+import com.mac.care_point.master.bay.BayRepository;
+import com.mac.care_point.master.bay.model.Bay;
 import com.mac.care_point.master.vehicleAssignment.VehicleAssignmentRepository;
 import com.mac.care_point.master.vehicleAssignment.model.TVehicleAssignment;
 import com.mac.care_point.service.common.Constant;
@@ -23,6 +25,7 @@ import com.mac.care_point.service.vehicle_attenctions.model.TJobVehicleAttenctio
 import com.mac.care_point.service.zmaster.vehicle.SVVehicleRepository;
 import com.mac.care_point.service.zmaster.vehicle.model.MVehicle;
 import com.mac.care_point.system.exception.DuplicateEntityException;
+import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -63,6 +66,9 @@ public class JobCardService {
 
     @Autowired
     private SVVehicleRepository sVVehicleRepository;
+   
+    @Autowired
+    private BayRepository bayRepository;
 
     @Autowired
     private TPriceCategoryChangeDetailsRepository tPriceCategoryChangeDetailsRepository;
@@ -128,12 +134,22 @@ public class JobCardService {
             //save vehicle assignment wating bay -  set default washing bay
             String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             TVehicleAssignment tVehicleAssignment = new TVehicleAssignment();
-            tVehicleAssignment.setBay(2); //branch default bay
+            List<Bay> bayList = bayRepository.findByBranchAndType(SecurityUtil.getCurrentUser().getBranch(), "VEHICLE_WAITING_BAY");
+            if (!bayList.isEmpty()) {
+                tVehicleAssignment.setBay(bayList.get(0).getIndexNo()); //branch default waiting bay
+                
+            }else{
+                throw new DuplicateEntityException("Can't find vehicile waiting bay from login branch !");
+            }
             tVehicleAssignment.setOutTime(null);//no out time yet 
             tVehicleAssignment.setBranch(jobCard.getBranch());
             tVehicleAssignment.setDate(new Date());
             tVehicleAssignment.setInTime(currentTime);
             tVehicleAssignment.setJobCard(getSaveData.getIndexNo());
+            tVehicleAssignment.setTimeStop(false);
+            tVehicleAssignment.setTime("00:00:00");
+            tVehicleAssignment.setEmployeeCount(0);
+            tVehicleAssignment.setPercentage(0);
             vehicleAssignmentRepository.save(tVehicleAssignment);
 
         } else {

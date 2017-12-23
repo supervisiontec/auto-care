@@ -254,7 +254,7 @@
                 return defer.promise;
             },
             totalTimeCalac: function () {
-              var that=this;  
+                var that = this;
                 that.packageData.count = that.packageViewList.length;
             },
 //            , floorTime: function (milisecondsDiff) {
@@ -481,7 +481,7 @@
                 var lable = null;
                 angular.forEach(this.bayList, function (bayDeiatl) {
                     if (bay === parseInt(bayDeiatl.indexNo)) {
-                        lable = bayDeiatl.indexNo+" - "+bayDeiatl.name;
+                        lable = bayDeiatl.indexNo + " - " + bayDeiatl.name;
                         return;
                     }
                 });
@@ -518,10 +518,10 @@
                 //select item data
                 that.tempItemData = that.item(item);
                 if (that.tempItemData.type === 'PACKAGE' || that.tempItemData.type === 'SERVICE') {
-                    angular.forEach(that.items,function (data){
-                        if (data.indexNo===item) {
-                            that.selectedItemFromPriceCategory=data;
-                            return ;
+                    angular.forEach(that.items, function (data) {
+                        if (data.indexNo === item) {
+                            that.selectedItemFromPriceCategory = data;
+                            return;
                         }
                     });
 
@@ -537,10 +537,27 @@
                             });
                     return defer.promise;
                 } else {
-                    that.selectedItemFromPriceCategory=null;
+                    that.selectedItemFromPriceCategory = null;
                     that.priceCategoryDetail.item = "";
                     Notification.error('select Package Item or Activity to save price category !');
                 }
+            },
+            getTotalTimeByPriceCategory: function (packageId, priceCategoryId) {
+                var that = this;
+                var defer = $q.defer();
+
+                var time = "00:00:00";
+
+                itemService.getTotalTimeByPriceCategory(packageId, priceCategoryId)
+                        .success(function (data) {
+                            time = data;
+                            console.log(time);
+                            defer.resolve();
+                        })
+                        .error(function () {
+                            defer.reject();
+                        });
+//                return time;
             },
             savePriceCategoryDetail: function () {
                 var that = this;

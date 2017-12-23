@@ -15,6 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CustomerSatisfactionRepository extends JpaRepository<CustomerSatisfaction, Integer> {
 
-    public List<CustomerSatisfaction> findByDefaultFinalCheckAndInvoiceAndRateAndRateReasonAndStatus(boolean b, boolean b0, int i, String reason,String ststus);
+    public List<CustomerSatisfaction> findByInvoiceAndRateAndRateReasonAndStatus(boolean b0, int i, String reason,String ststus);
 
 }

@@ -54,6 +54,15 @@ public class TVehicleAssignment implements Serializable {
 
     @Column(name = "time_stop")
     private boolean timeStop;
+   
+    @Column(name = "`time`")
+    private String time;
+    
+    @Column(name = "employee_count")
+    private Integer employeeCount;
+    
+    @Column(name = "`percentage`")
+    private Integer percentage;
 
     public TVehicleAssignment() {
     }
@@ -62,7 +71,7 @@ public class TVehicleAssignment implements Serializable {
         this.outTime = outTime;
     }
 
-    public TVehicleAssignment(Integer indexNo, String inTime, String outTime, Integer branch, Date date, Integer jobCard, Integer bay, boolean timeStop) {
+    public TVehicleAssignment(Integer indexNo, String inTime, String outTime, Integer branch, Date date, Integer jobCard, Integer bay, boolean timeStop, String time, Integer employeeCount, Integer percentage) {
         this.indexNo = indexNo;
         this.inTime = inTime;
         this.outTime = outTime;
@@ -71,7 +80,36 @@ public class TVehicleAssignment implements Serializable {
         this.jobCard = jobCard;
         this.bay = bay;
         this.timeStop = timeStop;
+        this.time = time;
+        this.employeeCount = employeeCount;
+        this.percentage = percentage;
     }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Integer getEmployeeCount() {
+        return employeeCount;
+    }
+
+    public void setEmployeeCount(Integer employeeCount) {
+        this.employeeCount = employeeCount;
+    }
+
+    public Integer getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(Integer percentage) {
+        this.percentage = percentage;
+    }
+
+   
 
     public Integer getIndexNo() {
         return indexNo;

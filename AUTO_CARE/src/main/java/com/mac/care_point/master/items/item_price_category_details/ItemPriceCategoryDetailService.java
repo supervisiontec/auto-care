@@ -35,4 +35,12 @@ public class ItemPriceCategoryDetailService {
         categoryDetailRepository.delete(indexNo);
         return indexNo;
     }
+
+    public MPriceCategoryDetails getTotalTimeByPriceCategory(Integer packageId, Integer priceCategoryId) {
+        String totalTime = categoryDetailRepository.getTotalTimeByPriceCategory(packageId,priceCategoryId);
+        MPriceCategoryDetails mPriceCategoryDetails = new MPriceCategoryDetails();
+        mPriceCategoryDetails.setTime(totalTime);
+        return mPriceCategoryDetails;
+    }
 }
+ 

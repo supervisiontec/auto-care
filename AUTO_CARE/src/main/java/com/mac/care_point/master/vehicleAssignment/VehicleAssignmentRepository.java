@@ -5,6 +5,7 @@
  */
 package com.mac.care_point.master.vehicleAssignment;
 
+import com.mac.care_point.master.employee.model.Employee;
 import com.mac.care_point.master.vehicleAssignment.model.TVehicleAssignment;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,14 +18,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface VehicleAssignmentRepository extends JpaRepository<TVehicleAssignment, Integer> {
 
-//    public List<TVehicleAssignment> findByBranchAndJobCardStatusNot(Integer branch, String status);
-
     public List<TVehicleAssignment> findTop1ByJobCardOrderByInTimeDesc(Integer jobCardIndexNo);
 
-//    public List<TVehicleAssignment> findByJobCardStatusNotIn(String status);
     public List<TVehicleAssignment> findByBranchAndBayAndOutTime(Integer branch, Integer bay, Object object);
 
-//    public List<TVehicleAssignment> findByBranch(Integer branch);
     @Query(value = "select COUNT(t_vehicle_assignment.index_no) as count\n"
             + "from t_vehicle_assignment,t_job_card\n"
             + "where t_job_card.index_no=t_vehicle_assignment.job_card\n"
@@ -37,4 +34,13 @@ public interface VehicleAssignmentRepository extends JpaRepository<TVehicleAssig
     public List<TVehicleAssignment> findByJobCardOutTimeAsc(@Param("jobCard") Integer jobCard);
 
     public List<TVehicleAssignment> findByJobCard(Integer jobCard);
+
+    @Query(value = "select m_employee.index_no\n"
+            + "from m_employee\n"
+            + "left JOIN t_employee_assingment on t_employee_assingment.employee=m_employee.index_no\n"
+            + "where t_employee_assingment.date=:date\n"
+            + "	and t_employee_assingment.bay=:bay\n"
+            + " 	and t_employee_assingment.`status`='PENDING'\n"
+            + " 	and t_employee_assingment.is_out=0", nativeQuery = true)
+    public List<Integer> getBayDefaultEmplyee(@Param("date")String date,@Param("bay") Integer bay);
 }

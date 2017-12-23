@@ -70,6 +70,10 @@
         this.loadPriceCategoryDetailByItem = function (item) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/master/price-categiry-details/find-by-item/" + item);
         };
+        
+        this.getTotalTimeByPriceCategory=function (packageId, priceCategoryId){
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/price-categiry-details/get_total_time_by_price_category/" + packageId+"/"+priceCategoryId);
+        };
 
         //save functions
         this.saveItem = function (data) {

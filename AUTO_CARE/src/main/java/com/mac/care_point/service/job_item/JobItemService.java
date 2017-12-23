@@ -7,6 +7,7 @@ package com.mac.care_point.service.job_item;
 
 import com.mac.care_point.master.items.package_item.PackageItemRepository;
 import com.mac.care_point.master.items.package_item.model.MPackageItem;
+import com.mac.care_point.master.vehicleAssignment.model.TVehicleAssignment;
 import com.mac.care_point.service.common.Constant;
 import com.mac.care_point.service.final_check_list.MItemCheckDetailRepository;
 import com.mac.care_point.service.final_check_list.TJobItemCheckRepository;
@@ -97,6 +98,7 @@ public class JobItemService {
             tJobCardActivities.setItem(jobItem.getItem());
             tJobCardActivities.setJobCard(jobItem.getJobCard());
             tJobCardActivities.setUsed(false);
+            tJobCardActivities.setVehicleAssignment(null);
             tJobCardActivities.setJobItem(getSaveData.getIndexNo());
             jobCardActivitiesRepository.save(tJobCardActivities);
 
@@ -110,6 +112,7 @@ public class JobItemService {
                 tJobCardActivities.setItem(mPackageItem.getItem());
                 tJobCardActivities.setJobCard(jobItem.getJobCard());
                 tJobCardActivities.setUsed(false);
+                tJobCardActivities.setVehicleAssignment(null);
                 tJobCardActivities.setJobItem(getSaveData.getIndexNo());
                 jobCardActivitiesRepository.save(tJobCardActivities);
 

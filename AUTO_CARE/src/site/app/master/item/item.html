@@ -60,15 +60,15 @@
                                 <td><input class="form-control" ng-model="model.itemData.unit" ng-disabled="ui.mode !== 'EDIT'"></td>
                             </tr>
                             <tr ng-show="textViewMode === 'SERVICE'">
-                                <td><label class="control-label">Time</label></td>
-                                <td><input class="form-control" ng-model="model.itemData.time" 
-                                           uib-typeahead="time as time for time in model.timeList |filter:$viewValue |limitTo:10" 
-                                           typeahead-input-formatter="model.timeLable($model)"
+                                <td><label class="control-label">Bay</label></td>
+                                <td><input class="form-control" ng-model="model.itemData.bay" 
+                                           uib-typeahead="bay.indexNo as (bay.indexNo + ' - ' + bay.name) for bay in model.bayList |filter:$viewValue|limitTo:10" 
+                                           typeahead-input-formatter="model.bayLable($model)"
                                            ng-disabled="ui.mode !== 'EDIT'"></td>
                             </tr>
                             <tr ng-show="textViewMode === 'SERVICE'">
-                                <td><label class="control-label">Bay</label></td>
-                                <td><input class="form-control" ng-model="model.itemData.bay" 
+                                <td><label class="control-label">Bay 2</label></td>
+                                <td><input class="form-control" ng-model="model.itemData.bay2" 
                                            uib-typeahead="bay.indexNo as (bay.indexNo + ' - ' + bay.name) for bay in model.bayList |filter:$viewValue|limitTo:10" 
                                            typeahead-input-formatter="model.bayLable($model)"
                                            ng-disabled="ui.mode !== 'EDIT'"></td>
@@ -213,7 +213,11 @@
                             </tr>
                             <tr>
                                 <td><label class="control-label">Price Category*</label></td>
-                                <td><input class="form-control" ng-model="model.priceCategoryDetail.priceCategory" uib-typeahead="priceCategory.indexNo as (priceCategory.indexNo + ' - ' + priceCategory.name) for priceCategory in model.priceCategory |filter:$viewValue|limitTo:10" typeahead-input-formatter="model.priceCategoryLable($model)" typeahead-on-select="model.checkItemDuplicate($model);" ng-disabled="ui.mode !== 'EDIT'"></td>
+                                <td><input class="form-control" ng-model="model.priceCategoryDetail.priceCategory" 
+                                           uib-typeahead="priceCategory.indexNo as (priceCategory.indexNo + ' - ' + priceCategory.name) for priceCategory in model.priceCategory |filter:$viewValue|limitTo:10" 
+                                           typeahead-input-formatter="model.priceCategoryLable($model)" 
+                                           typeahead-on-select="model.checkItemDuplicate($model);" 
+                                           ng-disabled="ui.mode === 'IDEAL'"></td>
                             </tr>
                             <tr>
                                 <td><label class="control-label">Select Next* &nbsp;</label><input type="radio" ng-model="selectNextPriceCategoryDetails" ng-value="true" ng-disabled="ui.mode !== 'EDIT'" ng-change="ui.selectNextPriceCategoryDetails(selectNextPriceCategoryDetails)"></td>
@@ -315,6 +319,7 @@
                                         <td class="text-right">{{priceCategoryDetail.normalPrice|number:2}}</td>
                                         <td class="text-right">{{priceCategoryDetail.registerPrice|number:2}}</td>
                                         <td class="text-right">{{model.selectedItemFromPriceCategory.type==='SERVICE'?priceCategoryDetail.time:'- - -'}}</td>
+                                        <!--model.getTotalTimeByPriceCategory(model.selectedItemFromPriceCategory.indexNo,priceCategoryDetail.priceCategory).time-->
                                         <td class="text-right" ng-disabled="ui.mode === 'EDIT'">
                                             <a class="btn btn-primary" ng-click="ui.editePriceCategoryDetail(priceCategoryDetail, $index)"><span class="glyphicon glyphicon-edit"></span></a>
                                             <a class="btn btn-danger" ng-click="ui.deletePriceCategoryDetail($index, priceCategoryDetail.indexNo)"><span class="glyphicon glyphicon-trash"></span></a>

@@ -30,12 +30,10 @@ public interface JobCardActivitiesRepository extends JpaRepository<TJobCardActiv
             + "   m_bay_main.index_no=:bay", nativeQuery = true)
     public List<TJobCardActivities> findByJobCardAndBay(@Param("jobCard") Integer jobCard, @Param("bay") Integer bay);
 
-    @Query(value = "select\n"
-            + "	ifnull(SEC_TO_TIME(SUM( TIME_TO_SEC( t_job_activities.activity_time ))),\"00:00:00\") AS timeSum \n"
-            + "from \n"
-            + "	t_job_activities\n"
-            + "WHERE t_job_activities.job_card=:job\n"
-            + "	and t_job_activities.bay=:bay", nativeQuery = true)
+    @Query(value = "select t_vehicle_assignment.time\n"
+            + "from t_vehicle_assignment\n"
+            + "where t_vehicle_assignment.job_card=:job and t_vehicle_assignment.bay=:bay\n"
+            + "order by t_vehicle_assignment.in_time desc limit 1", nativeQuery = true)
     public String findByFlatRateFromJobCard(@Param("job") Integer jobIndex, @Param("bay") Integer bay);
 
     public List<TJobCardActivities> findByJobCard(Integer jobCard);

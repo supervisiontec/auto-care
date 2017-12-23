@@ -12,8 +12,8 @@
                             <label class="label label-primary">Max :{{bay.maxVehicle}}</label>
                         </div>
                         <div class="col-xs-8 nopadding" ng-click="ui.selectBay(bay)">
-                            <label class="h5 pull-left" style="margin-top: 0px;width: 100%" >{{bay.name}} </label> 
-                            <label class="h6 pull-left" style="margin-top: 0px;width: 100%" ng-hide="!bay.flatRate || bay.flatRate==='00:00:00'">Time :{{bay.flatRate}} </label> 
+                            <label class="h5 pull-left" style="margin-top: 0px;width: 100%;" >{{bay.name}} </label> 
+                            <label class="h6 pull-left" style="margin-top: 0px;width: 100%;" ng-hide="!bay.flatRate || bay.flatRate==='00:00:00'">Time :{{bay.flatRate}} </label> 
                         </div>
                         <div class="col-xs-1 nopadding">
                             <a class="btn btn-danger pull-right" ng-click="stop(bay)" ng-show='bay.timeout' ><span class="glyphicon glyphicon-remove"> {{bay.timeout}}</span></a>
@@ -21,9 +21,9 @@
                     </div>
                     <div class="smart-scroll-y" style="display: table-row;">
 
-                        <div ng-repeat="job in model.jobList" ng-if="job.bay==bay.indexNo" 
+                        <div ng-repeat="job in model.jobList" ng-if="job.bay === bay.indexNo" 
                              ng-drag="{{dragableMode}}" ng-drag-data="job" class="tile tile-100-65 col-lg-6 nopadding" ng-click="ui.selectJob(job)" 
-                             style="border-style: groove;background-color: #ffffff" ng-class="ui.addClass(job) || {'selected':job.indexNo == model.selectJob.indexNo}">
+                             style="border-style: groove;background-color: #ffffff" ng-class="ui.addClass(job) || {'selected':job.indexNo === model.selectJob.indexNo}">
                             <span  style="display: block;text-align: center;">
                                 <i  id="simple-dropdown" uib-dropdown-toggle>
                                     <img src="../../../img/05.png"/>
@@ -42,9 +42,13 @@
     </div>
 </div>
 <div class="fab-container pull-left" style="z-index: 2;opacity: 1 !important">
-    <a class="fab fab-success" ng-show='model.selectJob!==null' ng-click="ui.loadItemPopup();"><i class="glyphicon glyphicon-fullscreen"></i></a>
-    <a class="fab fab-primary" ng-show='model.selectJob!==null' ng-click="ui.setStopTime();"><i class="glyphicon glyphicon-log-out"></i></a>
+    <a class="fab fab-default" ng-show="model.selectJob.colourClass === 'stoped'" ng-click="ui.addNewJob();"><i class="glyphicon glyphicon-plus"></i></a>
+    <a class="fab fab-success" ng-show='model.selectJob !== null' ng-click="ui.loadItemPopup();"><i class="glyphicon glyphicon-fullscreen"></i></a>
+    <a class="fab fab-primary" ng-show='model.selectJob !== null' ng-click="ui.setStopTime();"><i class="glyphicon glyphicon-log-out"></i></a>
 </div>
+
+
+
 
 <script type="text/ng-template" id="jobActivities.html">
     <div class="col-lg-12 background-light">
@@ -56,7 +60,7 @@
                 </center>
             </div>
         </div>
-    <div class="modal-body" style="height:250px">
+    <div class="modal-body" style="height:440px">
         <div class="col-xs-12 ">
             <table class="table-rounded control-table">
                 <col style="width: 60%"/>
@@ -71,7 +75,7 @@
                 </theader>
             </table>
         </div>
-        <div class="col-xs-12 smart-scroll-y" style="height:200px">
+        <div class="col-xs-12 smart-scroll-y" style="height:226px">
             <table class="table-rounded control-table">
                 <col style="width: 60%"/>
                 <col style="width: 20%"/>
@@ -80,13 +84,83 @@
                     <tr ng-repeat="activity in model.activityList | orderBy:'used'" ng-disabled ="activity.used"  ng-class="{'row-disabled':activity.used===true}">
                         <td>{{item(activity.item)}}</td>
                         <td>{{activity.activityTime}}</td>
-                            
+
                         <td><input type="checkbox" ng-model="activity.setUsed" ng-disabled="activity.used" /></td>
                     </tr>
                 </theader>
             </table>
         </div>
-                    
+        <div class="col-xs-12 smart-scroll-y nopadding" style="height:173px" ng-show="!employeeDetailHide">
+            <div class='col-xs-6 nopadding'>
+                <table class="table-rounded control-table">
+                    <col style="width: 100%"/>
+                    <theader>
+                        <tr>
+                            <th><label>Select Employee </label></th>
+                        </tr>
+                    </theader>
+                </table>
+                <div class=" col-xs-9 nopadding">
+                    <table class="table-rounded control-table" >
+                        <col style="width: 85%"/>
+                        <col style="width: 15%"/>
+                        <theader>
+                            <tr>
+                                <td>
+                                    <input class="form-control " ng-model="model.data.employee" 
+                                        uib-typeahead="employee.indexNo as (employee.indexNo+' - '+employee.name) for employee in model.employeeList|filter:$viewValue|limitTo:3" 
+                                        typeahead-input-formatter="model.employeeLable($model)" 
+                                        typeahead-editable="false"
+                                        typeahead-on-select="model.selectedEmployeeFunc($model)"
+                                        ng-disabled="false"
+                                    />
+                                </td>
+                                <td>
+                                    <a class="btn btn-lg btn-success" ng-click="model.addSelectedEmployeeList(model.data.employee)">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </theader>
+                    </table>
+                </div>
+                <div class=" col-xs-3 nopadding" style='height: 110px;border-style: ridge;border-width: 4px;border-color: gray'>
+                    <img src="{{model.selectedEmployee.imageData}}" class="img-rounded" alt="" width="100" height="100"/>
+                    <!--{{model.selectedEmployee.name}}-->
+                </div>
+            </div>
+            <div class='col-xs-6 nopadding'>
+                <table class="table-rounded control-table">
+                    <col style="width: 90%"/>
+                    <col style="width: 10%"/>
+                    <theader>
+                        <tr>
+                            <th><label>Added Employee List</label></th>
+                            <th><label class="label label-primary">{{model.employeeListSelected.length}}</label></th>
+                        </tr>
+                    </theader>
+                </table>
+                <div class="smart-scroll-y" style="height:115px">
+                    <table class="table-rounded control-table">
+                        <col style="width: 10%"/>
+                        <col style="width: 80%"/>
+                        <col style="width: 10%"/>
+                        <theader>
+                            <tr ng-repeat="employee in model.employeeListSelected">
+                                <td><label>{{employee.indexNo}}</label></td>
+                                <td><label>{{employee.name}}</label></td>
+                                <td>
+                                    <a class="btn btn-lg btn-danger" ng-click="model.removeSelectedEmployee(employee.indexNo)">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        </theader>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer bg-primary">
         <div class="col-lg-12">

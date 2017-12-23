@@ -31,6 +31,10 @@ public class ItemPriceCategoryDetailController {
     public List<MPriceCategoryDetails> findByItem(@PathVariable Integer item) {
         return itemPriceCategoryDetailService.findByItem(item);
     }
+    @RequestMapping(value = "/get_total_time_by_price_category/{packageId}/{priceCategoryId}", method = RequestMethod.GET)
+    public MPriceCategoryDetails getTotalTimeByPriceCategory(@PathVariable Integer packageId,@PathVariable Integer priceCategoryId) {
+        return itemPriceCategoryDetailService.getTotalTimeByPriceCategory(packageId,priceCategoryId);
+    }
 
     @RequestMapping(value = "/insert-detail", method = RequestMethod.POST)
     public MPriceCategoryDetails saveMPriceCategoryDetails(@RequestBody MPriceCategoryDetails mPriceCategoryDetails) {
