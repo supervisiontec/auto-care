@@ -10,7 +10,6 @@ import com.mac.care_point.service.invoice.invoice.ClientLegerRepository;
 import com.mac.care_point.service.invoice.invoice.PaymentInformationRepostory;
 import com.mac.care_point.service.invoice.invoice.PaymentRepository;
 import com.mac.care_point.service.invoice.invoice.model.TCustomerLedger;
-import com.mac.care_point.service.invoice.invoice.model.TInvoice;
 import com.mac.care_point.service.invoice.invoice.model.TPayment;
 import com.mac.care_point.service.invoice.invoice.model.TPaymentInformation;
 import com.mac.care_point.service.payment_voucher.model.BalancePaymentModel;
