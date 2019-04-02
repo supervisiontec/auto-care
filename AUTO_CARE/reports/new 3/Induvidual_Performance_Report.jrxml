@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-10-16T12:07:47 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Employee_Bay_Assign_Detail" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3dd2ef20-2bb6-4583-9404-d892e840fb8a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="care_point"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="611"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="375"/>
+	<parameter name="FROM_DATE" class="java.util.Date"/>
+	<parameter name="TO_DATE" class="java.util.Date"/>
+	<parameter name="EMPLOYEE" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	t_job_card.number as job_no,
+	m_vehicle.vehicle_no ,
+	m_vehicle.index_no as veh_index,
+	t_employee_bay_detail.date,
+	ifnull(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time) ,'PENDING')as time_diff,
+	
+	
+	(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(ifnull(TIMEDIFF(t.out_time,t.in_time),SEC_TO_TIME(0))))),'')
+		from t_employee_bay_detail t
+			left JOIN t_job_card j on j.index_no=t.job_card
+			left JOIN m_vehicle v on v.index_no=j.vehicle
+		 where t.bay=m_bay.index_no and t.date BETWEEN   $P{FROM_DATE}  and   $P{TO_DATE} 
+		and (  $P{EMPLOYEE} is null or t.employee=  $P{EMPLOYEE}  )) as time_diff_sum,	
+		
+		(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(ifnull(TIMEDIFF(t.out_time,t.in_time),SEC_TO_TIME(0))))),'')
+		from t_employee_bay_detail t
+			left JOIN t_job_card j on j.index_no=t.job_card
+			left JOIN m_vehicle v on v.index_no=j.vehicle
+		 where t.date BETWEEN   $P{FROM_DATE}  and   $P{TO_DATE} 
+		and (  $P{EMPLOYEE} is null or t.employee=  $P{EMPLOYEE}  )) as time_diff_sum_total,	
+		
+		(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(
+		if(TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time)))>SEC_TO_TIME(0),TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time))),if(TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time))) is null,SEC_TO_TIME(0),SEC_TO_TIME(0)))))),'')
+		from 	t_employee_bay_detail a
+		left JOIN m_bay b on b.index_no=a.bay
+		left JOIN t_job_card j on j.index_no=a.job_card
+		left JOIN m_vehicle v on v.index_no=j.vehicle
+		where a.bay=m_bay.index_no and a.date BETWEEN   $P{FROM_DATE}   and  $P{TO_DATE}  
+		and (  $P{EMPLOYEE}  is null or a.employee= $P{EMPLOYEE}  )
+		)as save_hour_sum,
+		
+		(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(
+		if(TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time)))>SEC_TO_TIME(0),TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time))),if(TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time))) is null,SEC_TO_TIME(0),SEC_TO_TIME(0)))))),'')
+		from 	t_employee_bay_detail a
+		left JOIN m_bay b on b.index_no=a.bay
+		left JOIN t_job_card j on j.index_no=a.job_card
+		left JOIN m_vehicle v on v.index_no=j.vehicle
+		where  a.date BETWEEN   $P{FROM_DATE}   and  $P{TO_DATE}  
+		and (  $P{EMPLOYEE}  is null or a.employee= $P{EMPLOYEE}  )
+		)as save_hour_sum_total,
+		
+		(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(if(TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time)))<SEC_TO_TIME(0),
+		TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time))),
+		if(TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time))) 
+		is null,SEC_TO_TIME(0),SEC_TO_TIME(0)))))),'')
+		from 	t_employee_bay_detail a
+		left JOIN m_bay b on b.index_no=a.bay
+		left JOIN t_job_card j on j.index_no=a.job_card
+		left JOIN m_vehicle v on v.index_no=j.vehicle
+		where a.bay=m_bay.index_no and a.date BETWEEN   $P{FROM_DATE} and   $P{TO_DATE} 
+		and (  $P{EMPLOYEE}  is null or a.employee=  $P{EMPLOYEE}  )) as extra_hour_sum,
+		
+		(select concat(SEC_TO_TIME(sum(TIME_TO_SEC(if(TIMEDIFF(b.time_period,
+		(TIMEDIFF(a.out_time,a.in_time)))<SEC_TO_TIME(0),
+		TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time))),
+		if(TIMEDIFF(b.time_period,(TIMEDIFF(a.out_time,a.in_time))) 
+		is null,SEC_TO_TIME(0),SEC_TO_TIME(0)))))),'')
+		from 	t_employee_bay_detail a
+		left JOIN m_bay b on b.index_no=a.bay
+		left JOIN t_job_card j on j.index_no=a.job_card
+		left JOIN m_vehicle v on v.index_no=j.vehicle
+		where a.date BETWEEN   $P{FROM_DATE} and   $P{TO_DATE} 
+		and (  $P{EMPLOYEE}  is null or a.employee=  $P{EMPLOYEE}  )) as extra_hour_sum_total,
+		
+	
+	concat(left(m_bay.time_period,8)) as time_period,
+	if(TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time)))>'00"00:00',TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time))),if(TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time))) is null,'PENDING','- - -')) as save_hour,
+	if(TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time)))<'00"00:00',TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time))),if(TIMEDIFF(m_bay.time_period,(TIMEDIFF(t_employee_bay_detail.out_time,t_employee_bay_detail.in_time))) is null,'PENDING','- - -')) as extra_hour,
+	m_bay.index_no as bay_index,
+	m_bay.name as bay_name,
+	m_employee.index_no as emp_index,
+	m_employee.name as emp_name,
+	t_employee_bay_detail.in_time
+from t_employee_bay_detail
+	LEFT JOIN t_job_card on t_job_card.index_no = t_employee_bay_detail.job_card
+	LEFT JOIN m_bay on m_bay.index_no = t_employee_bay_detail.bay 
+	LEFT JOIN m_employee on m_employee.index_no = t_employee_bay_detail.employee
+	LEFT JOIN m_vehicle on m_vehicle.index_no = t_job_card.vehicle
+	LEFT JOIN m_client on m_client.index_no = t_job_card.`client`
+where t_employee_bay_detail.date BETWEEN  $P{FROM_DATE}  and  $P{TO_DATE} 
+	and  m_employee.index_no= $P{EMPLOYEE} 
+order by  m_bay.index_no,m_vehicle.index_no,t_employee_bay_detail.in_time]]>
+	</queryString>
+	<field name="job_no" class="java.lang.Integer"/>
+	<field name="vehicle_no" class="java.lang.String"/>
+	<field name="veh_index" class="java.lang.Integer"/>
+	<field name="date" class="java.sql.Date"/>
+	<field name="time_diff" class="java.lang.String"/>
+	<field name="time_diff_sum" class="java.lang.String"/>
+	<field name="time_diff_sum_total" class="java.lang.String"/>
+	<field name="save_hour_sum" class="java.lang.String"/>
+	<field name="save_hour_sum_total" class="java.lang.String"/>
+	<field name="extra_hour_sum" class="java.lang.String"/>
+	<field name="extra_hour_sum_total" class="java.lang.String"/>
+	<field name="time_period" class="java.lang.String"/>
+	<field name="save_hour" class="java.lang.String"/>
+	<field name="extra_hour" class="java.lang.String"/>
+	<field name="bay_index" class="java.lang.Integer"/>
+	<field name="bay_name" class="java.lang.String"/>
+	<field name="emp_index" class="java.lang.Integer"/>
+	<field name="emp_name" class="java.lang.String"/>
+	<field name="in_time" class="java.sql.Timestamp"/>
+	<variable name="vehicle_no1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{vehicle_no}]]></variableExpression>
+	</variable>
+	<variable name="vehicle_no2" class="java.lang.Integer" resetType="Group" resetGroup="Group" calculation="Count">
+		<variableExpression><![CDATA[$F{vehicle_no}]]></variableExpression>
+	</variable>
+	<group name="Group">
+		<groupExpression><![CDATA[$F{bay_index}]]></groupExpression>
+		<groupHeader>
+			<band height="17">
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<textField>
+					<reportElement x="50" y="2" width="511" height="15" uuid="b9ce2990-be8d-4c37-9a0e-7839af840ecc">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bay_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="2" width="50" height="15" uuid="a730ab80-e1df-457b-9310-adf2affee7f4">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box>
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bay_index}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="38">
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<staticText>
+					<reportElement x="4" y="7" width="76" height="15" uuid="235ca769-6c56-442a-853b-3ccf2b0d93ad">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Bay Job Count :]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="80" y="7" width="44" height="15" uuid="c220c38a-5233-401a-881e-a35942acffc0"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vehicle_no2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="290" y="7" width="90" height="15" uuid="2983fa35-099f-4396-a954-645c72b36a40"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{time_diff_sum}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="380" y="7" width="90" height="15" uuid="99aabade-2aef-4ae3-9891-83a4b9b95107"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{save_hour_sum}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="470" y="7" width="92" height="15" uuid="595c0a22-fe70-458b-8738-75d1a95b4faf"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{extra_hour_sum}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="250" y="7" width="36" height="15" uuid="d0f2c431-b70e-40f7-9261-f455143fff9c">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Total :]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="GroupBay">
+		<groupExpression><![CDATA[$F{in_time}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<textField>
+					<reportElement x="190" y="2" width="100" height="13" uuid="852af1d7-2647-4d4b-aad7-9d5575575f38">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{time_period}]]></textFieldExpression>
+				</textField>
+				<textField pattern="yyyy-MM-dd">
+					<reportElement x="3" y="2" width="93" height="13" uuid="cf817f67-6a05-492a-8042-87e8ee99ad57">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="470" y="2" width="91" height="13" uuid="83b8eef4-bcd2-4a40-992e-4e1757f03227"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{extra_hour}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="290" y="2" width="90" height="13" uuid="1c267507-e06b-431b-aa2f-af1d2a6ebd4c">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<box>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{time_diff}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="96" y="2" width="94" height="13" uuid="4e7495e8-a0f5-4b62-b5f5-87e492a3391a"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textFieldExpression><![CDATA[$F{vehicle_no}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="380" y="2" width="90" height="13" uuid="93538910-30c3-47b0-a6df-85dc79d09402"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{save_hour}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="400" y="7" width="150" height="15" uuid="e315eb20-628e-4f57-b712-9a0c38d74ba1">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Care Point,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="22" width="150" height="15" uuid="50739a1e-7bd3-4660-8659-ff19cb4b7b25">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Stanley Thilakarathne Mawatha,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="37" width="150" height="15" uuid="b0fd2d48-b4d3-4672-9feb-2bccdf72427a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Nugegoda.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-10" y="10" width="330" height="40" uuid="21f70311-ad3e-4fa1-b2ca-8c1134f4ec82"/>
+				<box leftPadding="10">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Care point]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="68" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="0" width="330" height="25" uuid="1b4cfbbf-42ae-439e-a959-eb8c322c4e40"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Induvidual Performance Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="30" width="76" height="18" uuid="63052951-94f4-467b-adcd-d57adb6c3672">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FROM_DATE :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="50" width="76" height="18" uuid="997275e5-308f-4639-9792-75bf8898b159">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TO_DATE :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="32" width="63" height="18" uuid="1cbd2ab4-d057-4501-b7cb-e78319c28e77">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMPLOYEE :]]></text>
+			</staticText>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="90" y="30" width="100" height="18" uuid="5b351304-4610-4692-bd30-c22dbbcf7d12"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="90" y="50" width="100" height="18" uuid="e73a2f03-33cf-4ba2-89a3-546d445d6ca3">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TO_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="32" width="215" height="18" uuid="fe7d6d5b-97af-4320-b4ef-5a6cc8da243b">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPLOYEE}==null?"":$F{emp_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="32" width="32" height="18" uuid="4903d79d-011e-46bb-a5b6-da664972bc34">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{EMPLOYEE}==null?"All":$F{emp_index}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="4" y="0" width="92" height="15" uuid="db29d1de-b4a8-4460-8f83-551200b2ea85"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="0" width="94" height="15" uuid="1ddc720d-d286-4989-a12f-85c7721c1527">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEHICLE NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="0" width="100" height="15" uuid="9744c362-b33a-4cdf-b479-ea1617205376">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FLAT RATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="0" width="90" height="15" uuid="94f5b1bc-66c3-40bb-8806-864e90b9af5f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[JOB TIME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="90" height="15" uuid="9b6cc7e9-5c28-45ab-b444-616a4e33d953"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAVE HOUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="92" height="15" uuid="fa6be474-1360-4319-a0dd-66d99f36248f"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXTRA HOUR]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{EMPLOYEE}==null]]></printWhenExpression>
+			<textField>
+				<reportElement x="109" y="0" width="42" height="13" uuid="3cda8352-6476-4471-bb09-a1ce08023257">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box rightPadding="10"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emp_index}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="0" width="399" height="13" uuid="0058e0c7-b830-4688-b7b3-35bf39774afc"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emp_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="124" y="7" width="61" height="15" uuid="b8763256-e5a0-4ee9-97eb-b9299d5cd25f">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm:ss a">
+				<reportElement x="185" y="7" width="140" height="15" uuid="f50dbfa6-2738-4d55-af6d-1bb09a57cc86"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="4" y="7" width="120" height="15" uuid="0d4946fb-bd79-46e2-9421-d953582315f5">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Printed Date & Time :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="470" y="7" width="40" height="15" uuid="33a46593-237b-4c17-b2aa-7e86776b9dc0">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="510" y="7" width="41" height="15" uuid="5ec5e539-d5f9-4039-a44e-c419ff3798f9"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="37" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="4" y="7" width="56" height="15" uuid="6c1c34c9-be0f-4f6a-910b-a1b8d25e3948">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Job Count :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="7" width="60" height="15" uuid="3f6861dd-e900-4ca1-ba7b-8cce8d1375d9"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{vehicle_no1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="7" width="90" height="15" uuid="4341fd7d-f463-4b1d-9288-928ea9873cf8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{time_diff_sum_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="7" width="90" height="15" uuid="f5e61aa1-6e9c-4309-9aba-b998a951c759"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{save_hour_sum_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="7" width="99" height="15" uuid="7dabad4b-08d5-4560-b285-d41ea509a6db"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{extra_hour_sum_total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="230" y="7" width="60" height="15" uuid="59da0d92-df31-48b7-91f6-d3b49d31e15b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Summary :]]></text>
+			</staticText>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="-20" y="17" width="595" height="30" uuid="2876e775-8f2d-4ac9-955b-43d8122581e7"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Empty Data :( change Parameter and try again.. !]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

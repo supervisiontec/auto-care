@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-08-11T16:40:51 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Free_Activity_Autoriration_Report" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1842c86b-eeb3-4df6-a99e-29461718f09f">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CarePoint.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="FROM_DATE" class="java.util.Date"/>
+	<parameter name="TO_DATE" class="java.util.Date"/>
+	<parameter name="BRANCH" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select 
+	t_job_card.date as job_date,
+	"User Name" as user_name,
+	m_vehicle.vehicle_no,
+	m_client.name as client_name,
+	m_item.name as activity_name,
+	"authorization person" as authorization_person,
+	m_branch.name as branch_name
+from
+	t_job_card
+	left JOIN m_vehicle on m_vehicle.index_no=t_job_card.vehicle
+	left JOIN m_client on m_client.index_no =t_job_card.`client`
+	left JOIN t_job_item on t_job_item.job_card=t_job_card.index_no
+	left JOIN m_item on m_item.index_no=t_job_item.item
+	left JOIN m_category on m_category.index_no=m_item.category
+	left JOIN m_branch on m_branch.index_no=t_job_card.branch
+where ( $P{BRANCH} is null or m_branch.index_no= $P{BRANCH})
+	and (1 is null or m_category.index_no=2)
+	and t_job_card.date BETWEEN  $P{FROM_DATE} and  $P{TO_DATE}]]>
+	</queryString>
+	<field name="job_date" class="java.sql.Date"/>
+	<field name="user_name" class="java.lang.String"/>
+	<field name="vehicle_no" class="java.lang.String"/>
+	<field name="client_name" class="java.lang.String"/>
+	<field name="activity_name" class="java.lang.String"/>
+	<field name="authorization_person" class="java.lang.String"/>
+	<field name="branch_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="402" y="5" width="150" height="15" uuid="9d9a909e-7beb-4f14-bd46-6c1457746928">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Care Point,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-20" y="10" width="270" height="40" uuid="a105ce24-dbae-4cee-bd87-88ed82caa47c"/>
+				<box leftPadding="10">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Care point]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="20" width="150" height="15" uuid="abca13b6-058e-4063-a465-a803a168364c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Stanley Thilakarathne Mawatha,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="35" width="150" height="15" uuid="4a181e64-1d6e-4904-b90b-29cc1eb398a6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Nugegoda.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="0" width="390" height="25" uuid="82753c0d-d13f-4a12-9dd8-30f563a72aa2"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Free Activity Autoriration Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="35" width="56" height="15" uuid="363b10d0-6933-4148-a6fc-11571c2cfcd1"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Branch :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="204" y="35" width="56" height="15" uuid="e4478516-2cb6-4d52-9ceb-d579b8897672"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[From Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="384" y="35" width="56" height="15" uuid="d1dd9202-76ff-4787-9476-dd59335d352f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[To Date :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="70" y="35" width="120" height="15" uuid="ffad5adf-6a6f-4407-a316-8b95dfaaad6e">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{BRANCH}==null?"All":$F{branch_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="260" y="35" width="110" height="15" uuid="994635a6-0829-486a-98d3-612492617a66">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="440" y="35" width="112" height="15" uuid="4444536a-4719-4ec0-94b3-143fe7172f08">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TO_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="0" width="90" height="15" uuid="f44f8d62-13eb-4115-b90a-ffa20ef61e21">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box leftPadding="20">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="110" height="15" uuid="3c432e35-2e07-4b24-a72d-4812c8e128dd"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[USER NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="60" height="15" uuid="d171e1e7-2e78-4896-8417-c04759482277"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEHICLE NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="100" height="15" uuid="1cab7475-4c77-4f86-b4cb-a090cb425c15"/>
+				<box leftPadding="0">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLIENT NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="0" width="120" height="15" uuid="93c89ed3-ae44-4c9a-99c3-309aa70fc427"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[AUTHORIZED BY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="0" width="115" height="15" uuid="392f77cd-632a-45e1-81fb-473494f7525f"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BRABCH NAME]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="-20" y="15" width="90" height="15" uuid="47c064e5-f1f8-4e9a-a5d8-f227bcd900cd"/>
+				<box leftPadding="20">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{job_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="15" width="110" height="15" uuid="2e45ab3d-e7af-42db-a30a-8bcda60b5218">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="15" width="60" height="15" uuid="a26417c0-8892-49be-a8d7-e09a095f6057"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{vehicle_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="15" width="100" height="15" uuid="f63640c5-78e0-44f1-a260-24f4609f6db5"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{client_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="0" width="550" height="15" uuid="74c11db6-d0b4-46ce-9ca5-262a8478cd23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{activity_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="15" width="120" height="15" uuid="5d2238d6-0855-4e46-81ee-6bc9eab509d7"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{authorization_person}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="15" width="115" height="15" uuid="080f471c-87a2-4837-b829-1971e08b63b2">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{branch_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="470" y="6" width="40" height="16" uuid="78fc110c-9699-442e-93ee-78279dae0e9f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="510" y="6" width="41" height="16" uuid="8579c908-3073-405f-976a-5c6119976152"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd">
+				<reportElement x="100" y="6" width="90" height="16" uuid="abd1bccd-fe63-4e2e-b72f-d2f249c8b6d5">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm:ss a">
+				<reportElement x="190" y="6" width="140" height="16" uuid="ff378536-4eb3-438a-9c38-bb99b985e828"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="6" width="100" height="16" uuid="498fba04-75a7-4db9-ad70-809e75e6554a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Printed Date & Time :]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="-20" y="10" width="595" height="30" uuid="fe7b6bd0-0b99-4c03-a833-fb41107c8ab8"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Empty Data (: change Parameter and try again.. !]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

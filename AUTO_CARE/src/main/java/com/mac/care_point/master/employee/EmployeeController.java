@@ -66,14 +66,20 @@ public class EmployeeController {
 
     @RequestMapping(value = "/upload-image/{name}/{indexNo}", method = RequestMethod.POST)//, consumes = "multipart/form-data"
     public void saveImage(@RequestParam("file") MultipartFile file, @PathVariable("name") String name, @PathVariable("indexNo") String indexNo) throws IOException {
-        File uploadFile = new File(IMAGE_LOCATION, String.format(IMAGE_NAME_TEMPLATE, name, indexNo));
+        System.out.println("++++++++++++++++++++++++++++++++++++");
+        File uploadFile = new File(IMAGE_LOCATION, String.format(IMAGE_NAME_TEMPLATE, name, indexNo,null));
         if (!uploadFile.getParentFile().exists()) {
             uploadFile.getParentFile().mkdirs();
         }
-
+        System.out.println("file - "+file.getName());
+        System.out.println("file - "+file);
+        System.out.println("file - "+file.getContentType());
+        System.out.println("file - "+file.getSize());
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
 
+        System.out.println("buffer - "+bufferedImage);
         ImageIO.write(bufferedImage, "JPG", uploadFile);
+        System.out.println("++++++++++++++++++++++++++++++++++++");
     }
 
     @RequestMapping(value = "/download-image/{fileName:.+}", method = RequestMethod.GET)

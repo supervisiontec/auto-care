@@ -27,7 +27,8 @@
         };
         
         this.loadBayMain = function () {
-            return $http.get(systemConfig.apiUrl + "/api/care-point/master/bay/get-bay-main");
+            return null;
+//            return $http.get(systemConfig.apiUrl + "/api/care-point/master/bay/get-bay-main");
         };
 
         //load master files

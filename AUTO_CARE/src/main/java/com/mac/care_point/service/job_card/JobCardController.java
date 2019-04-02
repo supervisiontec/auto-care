@@ -6,6 +6,8 @@
 package com.mac.care_point.service.job_card;
 
 import com.mac.care_point.service.job_card.model.JobCard;
+import com.mac.care_point.service.job_card.model.JobCardMix;
+import com.mac.care_point.service.job_card.model.THistoryMix;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -66,6 +68,10 @@ public class JobCardController {
     public List<JobCard> findByBranchAndStatusAndInvoiceOrderByIndexNoDesc() {
         return jobCardService.findByBranchAndStatusAndInvoiceOrderByIndexNoDesc(SecurityUtil.getCurrentUser().getBranch());
     }
+    @RequestMapping(value = "/get-invoice-pending-job-card2", method = RequestMethod.GET)
+    public List<JobCardMix> devideJobCard() {
+        return jobCardService.devideJobCard(SecurityUtil.getCurrentUser().getBranch());
+    }
 
     @RequestMapping(value = "/get-default-check-list-pending-job-card", method = RequestMethod.GET)
     public List<JobCard> findByBranchAndStatusAndDefaultFinalCheckOrderByIndexNoDesc() {
@@ -107,6 +113,7 @@ public class JobCardController {
     @RequestMapping(value = "/download-image/{fileName:.+}", method = RequestMethod.GET)
     public void downloadImage(@PathVariable String fileName, HttpServletResponse response) throws FileNotFoundException, IOException {
         InputStream inputStream = new FileInputStream(IMAGE_LOCATION + "/" + fileName);
+        System.out.println("fileName : "+fileName);
         OutputStream outputStream = response.getOutputStream();
 
         byte[] bytes = new byte[1024];
@@ -134,6 +141,10 @@ public class JobCardController {
     @RequestMapping(value = "/find-job-history/{vehicleNo}", method = RequestMethod.GET)
     public List<JobCard> findJobHistory(@PathVariable("vehicleNo") String vehicleNo) {
         return jobCardService.findJobHistory(vehicleNo);
+    }
+    @RequestMapping(value = "/get-job-history-for-front/{vehicleNo}", method = RequestMethod.GET)
+    public List<THistoryMix> getJobHostory(@PathVariable("vehicleNo") String vehicleNo) {
+        return jobCardService.getJobHostory(vehicleNo);
     }
 
     @RequestMapping(value = "/update-price-category-details/{employee}", method = RequestMethod.POST)

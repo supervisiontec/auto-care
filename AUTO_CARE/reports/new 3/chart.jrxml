@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-08-15T12:15:16 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chart" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c1a96adb-1411-4150-b787-28ba7a375e6d">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="CarePoint.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[select 
+	(select count(t_job_item.index_no) from t_job_item where t_job_item.item_type='SERVICE_CHARGERS') as SERVICE_CHARGERS,
+	(select count(t_job_item.index_no) from t_job_item where t_job_item.item_type='SERVICE_ITEM') as SERVICE_ITEM,
+	(select count(t_job_item.index_no) from t_job_item where t_job_item.item_type='SERVICE_ITEM') as STOCK_ITEM,
+	'NUGEGODA' as branch_name
+from
+	t_job_item]]>
+	</queryString>
+	<field name="SERVICE_CHARGERS" class="java.lang.Integer"/>
+	<field name="SERVICE_ITEM" class="java.lang.Integer"/>
+	<field name="STOCK_ITEM" class="java.lang.Integer"/>
+	<field name="branch_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="359" splitType="Stretch">
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="60" width="575" height="299" uuid="a821cbfa-0142-4cd0-85e0-db2ebbcb09ea"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{SERVICE_CHARGERS}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{branch_name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{SERVICE_CHARGERS}]]></valueExpression>
+						<labelExpression><![CDATA[$F{branch_name}]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

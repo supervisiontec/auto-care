@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-09-23T18:58:58 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ACTIVITY_COUNT_REPORT" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="061289ca-ab15-42df-945d-727038d91de9">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="care_point"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="BRANCH" class="java.lang.Integer"/>
+	<parameter name="FROM_DATE" class="java.util.Date"/>
+	<parameter name="TO_DATE" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[select 
+m_item.index_no as item,
+m_item.name as item_name,
+count(t_job_item.index_no) as activity_count,
+sum(t_job_item.value) as total_activity,
+m_branch.name as branch_name
+from
+m_item
+left JOIN t_job_item on t_job_item.item=m_item.index_no
+left JOIN t_job_card on t_job_card.index_no=t_job_item.job_card
+left JOIN m_branch on m_branch.index_no=t_job_card.branch
+where m_branch.index_no= $P{BRANCH} 
+and t_job_card.date BETWEEN  $P{FROM_DATE}  and  $P{TO_DATE} 
+and t_job_item.item_type='SERVICE_ITEM'
+GROUP BY t_job_item.item
+HAVING count(t_job_item.index_no)>0]]>
+	</queryString>
+	<field name="item" class="java.lang.Integer"/>
+	<field name="item_name" class="java.lang.String"/>
+	<field name="activity_count" class="java.lang.Long"/>
+	<field name="total_activity" class="java.math.BigDecimal"/>
+	<field name="branch_name" class="java.lang.String"/>
+	<variable name="activity_count1" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{activity_count}]]></variableExpression>
+	</variable>
+	<variable name="total_activity1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_activity}]]></variableExpression>
+	</variable>
+	<variable name="item1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{item}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="51" splitType="Stretch">
+			<staticText>
+				<reportElement x="404" y="4" width="150" height="15" uuid="fb19b1cc-f612-43e3-ab09-c138a782f3b4">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Care Point,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="6" width="228" height="40" uuid="408053fa-de21-452b-b457-89395043617b"/>
+				<box leftPadding="10">
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[CAREPOINT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="404" y="19" width="150" height="15" uuid="d72fcc71-3006-40ff-b5bf-c162d36fa733">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Stanley Thilakarathne Mawatha,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="404" y="34" width="150" height="15" uuid="2bd9deff-6278-48ad-a387-70c84f53c452">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<text><![CDATA[Nugegoda.]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="5" width="299" height="25" uuid="2d6ca7ae-ee41-4fcb-8531-f208af069235"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACTIVITY COUNT REPORT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="40" width="50" height="15" uuid="23242676-d5f1-48b7-bf3c-db15bbbbcbc4">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Branch :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="40" width="148" height="15" uuid="6682b6ce-f14b-486e-9289-d324d80d600d"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{branch_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="218" y="40" width="50" height="15" uuid="da233ec3-f5ea-40f6-8b21-02381e7401b9">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[From Date :]]></text>
+			</staticText>
+			<textField pattern="yyyy_MM_dd">
+				<reportElement x="270" y="40" width="100" height="15" uuid="4b66df7b-4a21-4bcb-b7d7-7ec30bf7112f"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{FROM_DATE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="388" y="40" width="50" height="15" uuid="856b7bf2-6438-4fba-afc7-84e641488c0d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[To Date :]]></text>
+			</staticText>
+			<textField pattern="yyyy_MM_dd">
+				<reportElement x="440" y="40" width="99" height="15" uuid="024b2ac2-a630-4966-b740-6b11dde2e5c7"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{TO_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="57" height="15" uuid="9442fcd0-5678-420b-aa68-767f08e497a8">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="58" y="0" width="392" height="15" uuid="bf030af8-12ff-445e-8db4-da7512a7019e"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACTIVITY NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="0" width="50" height="15" uuid="db7c07e2-9e3c-474a-bc10-d1d53e919fe3"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="0" width="54" height="15" uuid="38958222-0d2f-48de-aa5d-d9c400dfdc88"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="5" width="57" height="15" uuid="3e39cde0-3bae-437e-8264-bbee72d68a9f"/>
+				<textFieldExpression><![CDATA[$F{item}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="5" width="392" height="15" uuid="af0be4f9-1d35-4a37-8adc-9fb13415294e"/>
+				<textFieldExpression><![CDATA[$F{item_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="5" width="40" height="15" uuid="33d30784-63b1-43b3-997e-fa822f2a885e">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box leftPadding="10"/>
+				<textFieldExpression><![CDATA[$F{activity_count}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###.00">
+				<reportElement x="490" y="5" width="64" height="15" uuid="b55eb919-07c6-4129-8bb5-a94e56cb2874"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{total_activity}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="398" y="7" width="42" height="18" uuid="07725d56-feaa-4bf9-b5be-a97781c8deb3">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="440" y="7" width="40" height="18" uuid="7b53035c-cb37-44ee-a0bd-716c404eb688"/>
+				<box rightPadding="10">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{activity_count1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###.00">
+				<reportElement x="480" y="7" width="70" height="18" uuid="79fdc786-02c8-448d-afca-946f2507023e"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_activity1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="7" width="89" height="18" uuid="57b94bba-6922-4d20-928b-eaad92bccac5">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No of Activity :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="90" y="7" width="60" height="18" uuid="1336ab14-2e04-4013-8a02-83236df1e7e2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{item1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

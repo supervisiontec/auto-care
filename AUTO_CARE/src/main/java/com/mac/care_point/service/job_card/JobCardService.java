@@ -15,6 +15,8 @@ import com.mac.care_point.service.final_check_list.TJobFinalCheckListRepository;
 import com.mac.care_point.service.final_check_list.model.MFinalCheckListItem;
 import com.mac.care_point.service.final_check_list.model.TJobFinalCheckList;
 import com.mac.care_point.service.job_card.model.JobCard;
+import com.mac.care_point.service.job_card.model.JobCardMix;
+import com.mac.care_point.service.job_card.model.THistoryMix;
 import com.mac.care_point.service.job_card.model.TPriceCategoryChangeDetails;
 import com.mac.care_point.service.job_item.JobItemRepository;
 import com.mac.care_point.service.job_item.model.TJobItem;
@@ -28,6 +30,7 @@ import com.mac.care_point.system.exception.DuplicateEntityException;
 import com.mac.care_point.zutil.SecurityUtil;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +69,7 @@ public class JobCardService {
 
     @Autowired
     private SVVehicleRepository sVVehicleRepository;
-   
+
     @Autowired
     private BayRepository bayRepository;
 
@@ -94,8 +97,6 @@ public class JobCardService {
             jobCard.setBay(2);//branch default bay
 
             getSaveData = jobCardRepository.save(jobCard);
-            
-            
 
             //check allrady exsist data
             List<TJobVehicleAttenctions> getJobCardData = jobVehicleAttenctionsRepository.findByJobCard(getSaveData.getIndexNo());
@@ -137,8 +138,8 @@ public class JobCardService {
             List<Bay> bayList = bayRepository.findByBranchAndType(SecurityUtil.getCurrentUser().getBranch(), "VEHICLE_WAITING_BAY");
             if (!bayList.isEmpty()) {
                 tVehicleAssignment.setBay(bayList.get(0).getIndexNo()); //branch default waiting bay
-                
-            }else{
+
+            } else {
                 throw new DuplicateEntityException("Can't find vehicile waiting bay from login branch !");
             }
             tVehicleAssignment.setOutTime(null);//no out time yet 
@@ -211,7 +212,7 @@ public class JobCardService {
 
     //final check list
     public List<JobCard> findByBranchAndStatusAndDefaultFinalCheckOrderByIndexNoDesc(Integer branch) {
-        return jobCardRepository.findByBranchAndStatusAndDefaultFinalCheckOrderByIndexNoDesc(branch, Constant.PENDING_STATUS, false);
+        return jobCardRepository.findByBranchAndStatusOrderByIndexNoDesc(branch, Constant.PENDING_STATUS);
     }
 
     public List<JobCard> getJobCardByVehicleNo(String vehicleNo) {
@@ -269,6 +270,47 @@ public class JobCardService {
             }
         }
         return jobCardRepository.save(jobCard);
+    }
+
+    public List<THistoryMix> getJobHostory(String vehicleNo) {
+        List<Object[]> jobHostory = jobCardRepository.getJobHistory(vehicleNo);
+        List<THistoryMix> list = new ArrayList<>();
+        for (Object[] object : jobHostory) {
+            THistoryMix mix = new THistoryMix();
+
+            mix.setJobIndex(Integer.valueOf(object[0].toString()));
+            mix.setColor(String.valueOf(object[1]));
+            mix.setDate(String.valueOf(object[2]));
+            mix.setInvNo(String.valueOf(object[3]));
+            mix.setAmount(String.valueOf(object[4]));
+            mix.setJobNo(Integer.parseInt(object[5].toString()));
+
+            mix.setJobDetail(jobCardRepository.getJobDetail(Integer.valueOf(object[0].toString())));
+            list.add(mix);
+        }
+
+        return list;
+
+    }
+
+    public List<JobCardMix> devideJobCard(Integer branch) {
+        List<JobCardMix> list = new ArrayList<>();
+        List<Object[]> devideJobCard = jobCardRepository.devideJobCard(branch);
+        for (Object[] object : devideJobCard) {
+            JobCardMix mix = new JobCardMix();
+            mix.setIndexNo(Integer.parseInt(object[0].toString()));
+            mix.setVehicle(Integer.parseInt(object[1].toString()));
+            mix.setVehicleNo(object[2].toString());
+            mix.setClient(Integer.parseInt(object[3].toString()));
+            mix.setDate(object[4].toString());
+            mix.setPriceCategory(Integer.parseInt(object[5].toString()));
+            mix.setServiceChagers(Boolean.parseBoolean(object[6].toString()));
+            mix.setItemType(object[7].toString());
+            mix.setColor(object[8].toString());
+
+            list.add(mix);
+        }
+        return list;
     }
 
 }

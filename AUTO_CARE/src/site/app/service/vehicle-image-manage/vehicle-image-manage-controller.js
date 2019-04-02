@@ -23,6 +23,7 @@
                     $scope.imagemodelX = [];
                     $scope.model.loadVehicleImages($scope.selectedJobCardIndexNo)
                             .then(function (data) {
+                                console.log(data);
                                 if (data.length > 0) {
                                     $scope.ui.imageShowMode1 = 'Avalable';
                                     $scope.ui.imageShowMode2 = 'Avalable';

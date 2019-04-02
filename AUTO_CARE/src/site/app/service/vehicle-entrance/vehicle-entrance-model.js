@@ -28,6 +28,7 @@
             lastJobCardVehicleAttenctionList: [],
             brandList: [],
             modelList: [],
+            jobHistory: [],
             constructor: function () {
                 var that = this;
                 this.vehicleData = vehicleEntranceFactory.newVehicleData();
@@ -80,6 +81,20 @@
                             that.vehicleList = data;
                         });
             },
+            getJobHistory: function (vehicleNo) {
+                var that = this;
+                console.log("vehicleNo");
+                that.jobHistory=[];
+               vehicleEntranceService.getJobHistory(vehicleNo)
+                        .success(function (dataList) {
+                            console.log(dataList);
+                            angular.forEach(dataList,function (data){
+                                data.expanded=false;
+                                that.jobHistory.push(data);
+                                
+                            });
+                        });
+            },
             clearModel: function () {
                 this.clientData = {};
                 this.vehicleData = {};
@@ -119,11 +134,14 @@
             },
             clientSearchByClientNo: function () {
                 var that = this;
+                console.log("ABCD");
+                console.log(this.vehicleData.client);
                 vehicleEntranceService.getClientByIndexNo(this.vehicleData.client)
                         .success(function (data) {
                             that.clientData = data;
                             var mobile = parseInt(data.mobile);
                             that.clientData.mobile = mobile;
+                            console.log(data);
                         });
             },
             searchPendingJobCard: function (VehicleNo) {
@@ -222,6 +240,16 @@
                 var vehicle = "";
                 angular.forEach(this.vehicleList, function (value) {
                     if (value.indexNo === parseInt(indexNo)) {
+                        vehicle = value.vehicleNo;
+                        return;
+                    }
+                });
+                return vehicle;
+            },
+            vehicleLabelByNumber: function (no) {
+                var vehicle = "";
+                angular.forEach(this.vehicleList, function (value) {
+                    if (value.vehicleNo === no) {
                         vehicle = value.vehicleNo;
                         return;
                     }

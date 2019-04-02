@@ -76,7 +76,7 @@ public class ItemService {
             List<MItemUnits> findItemList = itemUnitRepository.findByItemAndItemUnitType(saveItem.getIndexNo(), "MAIN");
 
             if (findItemList.isEmpty()) {
-                
+
                 MItemUnits itemUnits = new MItemUnits();
                 itemUnits.setItem(saveItem.getIndexNo());
                 itemUnits.setItemUnitType("MAIN");
@@ -105,7 +105,9 @@ public class ItemService {
     public void deleteItem(Integer indexNo) {
         try {
             List<MItemUnits> findItemList = itemUnitRepository.findByItemAndItemUnitType(indexNo, "MAIN");
-            itemUnitRepository.delete(findItemList.get(0));
+            if (!findItemList.isEmpty()) {
+                itemUnitRepository.delete(findItemList.get(0));
+            }
             itemRepository.delete(indexNo);
         } catch (Exception e) {
             throw new RuntimeException("cannot delete this item because there are details in other transaction");
@@ -117,8 +119,8 @@ public class ItemService {
         List<MItem> returnItemData = new ArrayList<>();
         for (Object[] objects : getItemData) {
             MItem itemModifyOb = itemRepository.findOne(Integer.parseInt(objects[0].toString()));
-            itemModifyOb.setSalePriceNormal((BigDecimal)objects[1]);
-            itemModifyOb.setSalePriceRegister((BigDecimal)objects[2]);
+            itemModifyOb.setSalePriceNormal((BigDecimal) objects[1]);
+            itemModifyOb.setSalePriceRegister((BigDecimal) objects[2]);
             returnItemData.add(itemModifyOb);
         }
         return returnItemData;

@@ -89,6 +89,9 @@
         this.getClientByNameMobile = function (name, mobile) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/service/zmaster/client/search-client-by-name-and-mobile/"+ name + "/" +mobile);
         };
+        this.getJobHistory = function (vehicleNo) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-card/get-job-history-for-front/" +vehicleNo);
+        };
     };
     angular.module("appModule")
             .service("vehicleEntranceService", service);

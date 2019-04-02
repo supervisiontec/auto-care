@@ -21,7 +21,7 @@ public interface JobCardRepository extends JpaRepository<JobCard, Integer> {
 
     public List<JobCard> findByBranchAndStatusAndInvoiceOrderByIndexNoDesc(Integer branch, String status, Boolean invoice);
 
-    public List<JobCard> findByBranchAndStatusAndDefaultFinalCheckOrderByIndexNoDesc(Integer branch, String status, Boolean defaultInvoice);
+    public List<JobCard> findByBranchAndStatusOrderByIndexNoDesc(Integer branch, String status);
 
     public List<JobCard> findByBranchAndStatusAndInvoiceAndDefaultFinalCheckOrderByIndexNoDesc(Integer branch, String status, Boolean invoice, Boolean defaultInvoice);
 
@@ -56,4 +56,45 @@ public interface JobCardRepository extends JpaRepository<JobCard, Integer> {
             + "and\n"
             + "  price_category_details.price_category = :priceCategory", nativeQuery = true)
     public List<Object[]> getItemPriceDetails(@Param("item") Integer item, @Param("priceCategory") Integer priceCategory);
+
+    @Query(value = "select t_job_card.index_no,\n"
+            + "	m_branch.color,\n"
+            + "	t_job_card.date,\n"
+            + "	(select GROUP_CONCAT(inv.invoice_no) \n"
+            + "		from t_invoice inv where inv.job_card=t_job_card.index_no\n"
+            + "	)as inv_no,\n"
+            + "	sum(t_invoice.amount) as amount,\n"
+            + "	t_job_card.number \n"
+            + "from t_job_card\n"
+            + "left join t_invoice on t_invoice.job_card=t_job_card.index_no\n"
+            + "left join m_vehicle on m_vehicle.index_no=t_job_card.vehicle   \n"
+            + "left join m_branch on m_branch.index_no=t_job_card.branch\n"
+            + "where m_vehicle.vehicle_no =:vehicleNo\n"
+            + "group by t_job_card.index_no \n"
+            + "order by t_job_card.index_no desc limit 7", nativeQuery = true)
+    public List<Object[]> getJobHistory(@Param("vehicleNo") String vehicleNo);
+
+    @Query(value = "select m_item.name\n"
+            + "from t_job_item\n"
+            + "left join m_item on m_item.index_no =t_job_item.item\n"
+            + "where t_job_item.job_card=:jobNo", nativeQuery = true)
+    public String[] getJobDetail(@Param("jobNo") Integer jobNo);
+
+    @Query(value = "select t_job_card.index_no,\n"
+            + "	t_job_card.vehicle,\n"
+            + "	m_vehicle.vehicle_no,\n"
+            + "	t_job_card.`client`,\n"
+            + "	t_job_card.date,\n"
+            + "	t_job_card.price_category,\n"
+            + "	t_job_card.service_chagers,\n"
+            + "	t_job_item.item_type,\n"
+            + "	if (t_job_item.item_type='SERVICE_ITEM','label-danger','label-primary') as color\n"
+            + "from t_job_card\n"
+            + "left join m_vehicle on m_vehicle.index_no=t_job_card.vehicle\n"
+            + "left join t_job_item on t_job_item.job_card=t_job_card.index_no \n"
+            + "where t_job_card.branch=:branch and t_job_card.`status`='PENDING' \n"
+            + "and t_job_card.invoice=false and t_job_item.is_invoice=false\n"
+            + "group by t_job_card.index_no desc ,  t_job_item.item_type\n"
+            + "HAVING t_job_item.item_type<>'SERVICE_CHARGERS'", nativeQuery = true)
+    public List<Object[]> devideJobCard(@Param("branch") Integer branch);
 }

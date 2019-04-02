@@ -32,7 +32,9 @@
             <div class="row" style="display: flex; flex-flow: column;height: calc(100vh - 52px)">
                 <div class="smart-scroll-y" style="height: calc(100vh - 52px);">
                     <div class="tile-lists">
-                        <div class="tiles tile-200 col-xs-4" style="background: {{detils.color}};" ng-repeat="detils in model.itemCategory" ng-click="ui.findSubCateoryByCateory(detils.indexNo);">
+                        <div class="tiles tile-200 col-xs-4" style="background: {{detils.color}};" 
+                             ng-repeat="detils in model.itemCategory" 
+                             ng-click="ui.findSubCateoryByCateory(detils.indexNo);">
                             <div style="margin-top: 21px; color: #fff;font-weight: bold;">                   
                                 <div class="col-xs-8" style="font-size: 19px;">
                                     {{detils.name}}

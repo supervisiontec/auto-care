@@ -333,12 +333,15 @@
                     relordPendingJobCard: function () {
                         var that = this;
                         invoiceService.pendingJobCards()
-                                .success(function (data) {
-                                    that.pendingJobCards = [];
-                                    angular.forEach(data, function (job) {
-                                        job.vehicleNo = that.vehicle(job.vehicle).vehicleNo;
-                                        that.pendingJobCards.push(job);
-                                    });
+                                .success(function (dataList) {
+                                    console.log("$$$$$$$$$$$$$$$$");
+                                    console.log(dataList);
+                                    console.log("$$$$$$$$$$$$$$$$");
+                                    that.pendingJobCards = dataList;
+//                                    angular.forEach(data, function (job) {
+//                                        job.vehicleNo = that.vehicle(job.vehicle).vehicleNo;
+//                                        that.pendingJobCards.push(job);
+//                                    });
                                 });
                     },
                     saveInvoice: function () {

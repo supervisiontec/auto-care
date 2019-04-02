@@ -90,6 +90,8 @@
                             .then(function (data) {
                                 $scope.itemStockItemQty = data;
                                 console.log($scope.itemStockItemQty);
+                                console.log(details[0]);
+                                console.log('details[0]');
                             });
 
                     if ($scope.model.getItemUnits(details[0]).length === 0) {

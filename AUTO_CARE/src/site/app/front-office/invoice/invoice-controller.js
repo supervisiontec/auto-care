@@ -27,11 +27,11 @@
                 $scope.clientLableView = false;
                 $scope.vehicleLableView = false;
 
-                $scope.ui.selectedJobCardRow = function (jobCard) {
+                $scope.ui.selectedJobCardRow = function (jobCard,index) {
 
                     $scope.invoiceModel.clear();
                     //job card seletion
-                    $scope.selectedJobCardIndexNo = jobCard.indexNo;
+                    $scope.selectedJobCardIndexNo = index;
 
                     $scope.invoiceModel.invoiceData.jobCard = jobCard.indexNo;
                     $scope.invoiceModel.getJobItemHistory(jobCard.indexNo);

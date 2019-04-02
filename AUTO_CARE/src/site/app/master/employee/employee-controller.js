@@ -36,12 +36,17 @@
 //                    var employeeNo = $scope.model.employee.indexNo;
                     for (var i = 0; i < $scope.imagemodel.length; i++) {
                         var url = systemConfig.apiUrl + "/api/care-point/master/employee/upload-image/" + name + "/" + indexNo;
+                        console.log(url);
                         var formData = new FormData();
                         formData.append("file", $scope.imagemodel[i]);
+                        console.log(formData);
 
                         var xhr = new XMLHttpRequest();
                         xhr.open("POST", url);
+                        console.log(xhr);
                         xhr.send(formData);
+                        console.log(xhr);
+                        console.log("xhr");
                     }
                 };
 

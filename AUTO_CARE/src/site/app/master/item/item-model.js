@@ -32,8 +32,8 @@
             packageViewList: [],
             itemCheckDetailList: [],
             priceCategoryDetailsList: [],
-            timeList: [],
-            bayList: [],
+//            timeList: [],
+//            bayList: [],
             selectedConsumableItem: {},
             selectedItem: {},
             selectedItemFromPriceCategory: {},
@@ -94,15 +94,15 @@
                         .success(function (data) {
                             that.suppliers = data;
                         });
-                itemService.loadBayMain()
-                        .success(function (data) {
-                            that.bayList = data;
-                        });
-                this.timeList = [
-                    "00:00:30", "00:01:00", "00:10:00", "00:15:00", "00:20:00", "00:25:00", "00:30:00",
-                    "00:35:00", "00:40:00", "00:45:00", "00:50:00", "00:55:00", "01:00:00", "01:10:00",
-                    "01:20:00", "01:30:00", "01:40:00", "01:50:00", "02:00:00"
-                ];
+//                itemService.loadBayMain()
+//                        .success(function (data) {
+//                            that.bayList = data;
+//                        });
+//                this.timeList = [
+//                    "00:00:30", "00:01:00", "00:10:00", "00:15:00", "00:20:00", "00:25:00", "00:30:00",
+//                    "00:35:00", "00:40:00", "00:45:00", "00:50:00", "00:55:00", "01:00:00", "01:10:00",
+//                    "01:20:00", "01:30:00", "01:40:00", "01:50:00", "02:00:00"
+//                ];
 
 
                 this.loadConsumableItem();
@@ -467,26 +467,26 @@
                 });
                 return item;
             },
-            timeLable: function (timePara) {
-                var lable = null;
-                angular.forEach(this.timeList, function (time) {
-                    if (time === timePara) {
-                        lable = time;
-                        return;
-                    }
-                });
-                return lable;
-            },
-            bayLable: function (bay) {
-                var lable = null;
-                angular.forEach(this.bayList, function (bayDeiatl) {
-                    if (bay === parseInt(bayDeiatl.indexNo)) {
-                        lable = bayDeiatl.indexNo + " - " + bayDeiatl.name;
-                        return;
-                    }
-                });
-                return lable;
-            },
+//            timeLable: function (timePara) {
+//                var lable = null;
+//                angular.forEach(this.timeList, function (time) {
+//                    if (time === timePara) {
+//                        lable = time;
+//                        return;
+//                    }
+//                });
+//                return lable;
+//            },
+//            bayLable: function (bay) {
+//                var lable = null;
+//                angular.forEach(this.bayList, function (bayDeiatl) {
+//                    if (bay === parseInt(bayDeiatl.indexNo)) {
+//                        lable = bayDeiatl.indexNo + " - " + bayDeiatl.name;
+//                        return;
+//                    }
+//                });
+//                return lable;
+//            },
             item: function (indexNo) {
                 var item;
                 angular.forEach(this.items, function (value) {
