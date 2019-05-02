@@ -49,6 +49,10 @@
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-item/find-by-job-card-items/" + indexNo);
         };
 
+        this.findJobCardPackageItems = function (indexNo, priceCategory) {
+            return $http.get(systemConfig.apiUrl + "/api/care-point/master/package-item/get-package-items-sub/" + indexNo + "/" + priceCategory);
+        };
+
         this.findJobCard = function (indexNo) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-card/get-job-card/" + indexNo);
         };
@@ -76,7 +80,7 @@
         this.findByNonStockItemAndStockItem = function (itemCategory) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-item/all-non-stock-and-stock-item/" + itemCategory);
         };
-        
+
         this.findByAvailableStockQty = function (itemIndexNo) {
             return $http.get(systemConfig.apiUrl + "/api/care-point/transaction/job-item/get-item-qty-by-stocks/" + itemIndexNo);
         };

@@ -23,20 +23,17 @@ public class JobCardMix implements Serializable{
     private Boolean serviceChagers;
     private String itemType;
     private String color;
+    private Boolean isDivide;
 
     public JobCardMix() {
     }
 
-    public JobCardMix(Integer indexNo, String date, Integer priceCategory, Integer client, Integer vehicle, String vehicleNo, Boolean serviceChagers, String itemType, String color) {
-        this.indexNo = indexNo;
-        this.date = date;
-        this.priceCategory = priceCategory;
-        this.client = client;
-        this.vehicle = vehicle;
-        this.vehicleNo = vehicleNo;
-        this.serviceChagers = serviceChagers;
-        this.itemType = itemType;
-        this.color = color;
+    public Boolean getIsDivide() {
+        return isDivide;
+    }
+
+    public void setIsDivide(Boolean isDivide) {
+        this.isDivide = isDivide;
     }
 
     public Integer getIndexNo() {

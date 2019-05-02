@@ -68,22 +68,18 @@ public class TJobItem implements Serializable {
     @Column(name = "is_change")
     private Boolean isChange;
 
+    @Column(name = "is_invoice")
+    private Boolean isInvoice;
 
     public TJobItem() {
     }
 
-    public TJobItem(Integer indexNo, Integer item, Integer itemUnit, String itemType, BigDecimal quantity, BigDecimal stockRemoveQty, BigDecimal price, BigDecimal value, String orderStatus, String jobStatus, Integer jobCard) {
-        this.indexNo = indexNo;
-        this.item = item;
-        this.itemUnit = itemUnit;
-        this.itemType = itemType;
-        this.quantity = quantity;
-        this.stockRemoveQty = stockRemoveQty;
-        this.price = price;
-        this.value = value;
-        this.orderStatus = orderStatus;
-        this.jobStatus = jobStatus;
-        this.jobCard = jobCard;
+    public Boolean getIsInvoice() {
+        return isInvoice;
+    }
+
+    public void setIsInvoice(Boolean isInvoice) {
+        this.isInvoice = isInvoice;
     }
 
     public Integer getIndexNo() {

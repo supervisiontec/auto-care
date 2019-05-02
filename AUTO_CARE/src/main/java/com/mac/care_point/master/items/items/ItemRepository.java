@@ -32,8 +32,6 @@ public interface ItemRepository extends JpaRepository<MItem, Integer> {
             + "on\n"
             + " item.index_no = price_category_details.item\n"
             + "where\n"
-            + " item.type = 'SERVICE'\n"
-            + "and \n"
             + " item.category = :category \n"
             + "and\n"
             + " price_category_details.price_category = :priceCategory ", nativeQuery = true)

@@ -18,7 +18,7 @@
                     <label class="text-center">{{invoiceModel.vehicle(detail.vehicle).vehicleNo}}</label>
                     <label ng-show="invoiceModel.vehicle(detail.vehicle).type === 'NORMAL'" class="label label-primary">NORMAL</label>
                     <label ng-show="invoiceModel.vehicle(detail.vehicle).type === 'REGISTER'" class="label label-success">REGISTER</label>
-                    <label class="label label-success" style="background: {{invoiceModel.priceCategoryData(detail.priceCategory).colour}};">{{invoiceModel.priceCategoryData(detail.priceCategory).name}}</label>
+                    <label class="label" style="background: {{invoiceModel.priceCategoryData(detail.priceCategory).colour}};">{{invoiceModel.priceCategoryData(detail.priceCategory).name}}</label>
                     <label class="label label-default">{{detail.date}}</label>
                     <label class="label label-default">{{detail.indexNo}}</label>
                     <label class="label " ng-class="detail.color">{{detail.itemType}}</label>
@@ -231,7 +231,7 @@
                                             <td><label>Pay Amount</label></td>
                                             <td><input smart-input="decimal" class="form-control text-right" ng-model="invoiceModel.invoiceData.amount" readonly> </td>
                                         </tr>
-                                        <tr class="background-dark">
+                                        <tr class="background-dark" ng-show="!selectJobCardServiceChagers">
                                             <td colspan="2">Discount</td>
                                         </tr>
                                         <tr ng-show="!selectJobCardServiceChagers">

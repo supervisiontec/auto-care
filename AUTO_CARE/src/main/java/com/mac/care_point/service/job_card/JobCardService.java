@@ -7,6 +7,8 @@ package com.mac.care_point.service.job_card;
 
 import com.mac.care_point.master.bay.BayRepository;
 import com.mac.care_point.master.bay.model.Bay;
+import com.mac.care_point.master.branch.BranchRepository;
+import com.mac.care_point.master.branch.model.MBranch;
 import com.mac.care_point.master.vehicleAssignment.VehicleAssignmentRepository;
 import com.mac.care_point.master.vehicleAssignment.model.TVehicleAssignment;
 import com.mac.care_point.service.common.Constant;
@@ -74,12 +76,16 @@ public class JobCardService {
     private BayRepository bayRepository;
 
     @Autowired
+    private BranchRepository branchRepository;
+
+    @Autowired
     private TPriceCategoryChangeDetailsRepository tPriceCategoryChangeDetailsRepository;
 
     public List<JobCard> getClientHistory(Integer indexNo) {
         return jobCardRepository.findJobCardByClient(indexNo);
     }
 
+    @Transactional
     public JobCard saveJobCard(JobCard jobCard) {
         JobCard getSaveData = new JobCard();
         List<JobCard> findByVehicleAndStatus = jobCardRepository.findByVehicleAndStatus(jobCard.getVehicle(), Constant.PENDING_STATUS);
@@ -295,7 +301,20 @@ public class JobCardService {
 
     public List<JobCardMix> devideJobCard(Integer branch) {
         List<JobCardMix> list = new ArrayList<>();
-        List<Object[]> devideJobCard = jobCardRepository.devideJobCard(branch);
+
+        MBranch branchModel = branchRepository.findOne(branch);
+        List<Object[]> devideJobCard = null;
+        System.out.println("branchModel.getIsDivideInvoice()");
+        System.out.println(branchModel.getIsDivideInvoice());
+                
+        if (branchModel.getIsDivideInvoice()) {
+            devideJobCard = jobCardRepository.devideJobCard(branch);
+            System.out.println(devideJobCard.size());
+        } else {
+            devideJobCard = jobCardRepository.getPendingJoCard(branch);
+            System.out.println(devideJobCard.size());
+        }
+
         for (Object[] object : devideJobCard) {
             JobCardMix mix = new JobCardMix();
             mix.setIndexNo(Integer.parseInt(object[0].toString()));
@@ -304,9 +323,11 @@ public class JobCardService {
             mix.setClient(Integer.parseInt(object[3].toString()));
             mix.setDate(object[4].toString());
             mix.setPriceCategory(Integer.parseInt(object[5].toString()));
-            mix.setServiceChagers(Boolean.parseBoolean(object[6].toString()));
+            mix.setServiceChagers("1".equals(object[6].toString()));
             mix.setItemType(object[7].toString());
             mix.setColor(object[8].toString());
+            mix.setIsDivide("1".equals(object[9].toString()));
+                    
 
             list.add(mix);
         }

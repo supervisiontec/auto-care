@@ -38,6 +38,9 @@ public class PriceCategory implements Serializable {
     @Column(name = "name")
     private String name;
     
+    @Column(name = "description")
+    private String description;
+    
     @Column(name = "colour")
     private String colour;
 
@@ -48,9 +51,19 @@ public class PriceCategory implements Serializable {
         this.indexNo = indexNo;
     }
 
-    public PriceCategory(Integer indexNo, String name) {
+    public PriceCategory(Integer indexNo, String name, String description, String colour) {
         this.indexNo = indexNo;
         this.name = name;
+        this.description = description;
+        this.colour = colour;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getIndexNo() {

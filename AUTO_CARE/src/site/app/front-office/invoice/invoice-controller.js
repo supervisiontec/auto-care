@@ -27,25 +27,27 @@
                 $scope.clientLableView = false;
                 $scope.vehicleLableView = false;
 
-                $scope.ui.selectedJobCardRow = function (jobCard,index) {
+                $scope.ui.selectedJobCardRow = function (jobCardMix,index) {
 
                     $scope.invoiceModel.clear();
                     //job card seletion
                     $scope.selectedJobCardIndexNo = index;
 
-                    $scope.invoiceModel.invoiceData.jobCard = jobCard.indexNo;
-                    $scope.invoiceModel.getJobItemHistory(jobCard.indexNo);
+                    $scope.invoiceModel.invoiceData.jobCard = jobCardMix.indexNo;
+                    $scope.invoiceModel.getJobItemHistory(jobCardMix);
 
-                    $scope.invoiceModel.getClientOverPayment(jobCard.client);
-                    $scope.invoiceModel.getClientBalance(jobCard.client);
+                    $scope.invoiceModel.getClientOverPayment(jobCardMix.client);
+                    $scope.invoiceModel.getClientBalance(jobCardMix.client);
+                    $scope.selectJobCardServiceChagers = jobCardMix.serviceChagers;
+                    if (jobCardMix.itemType==='STOCK_ITEM') {
+                        $scope.selectJobCardServiceChagers = false;
+                    }
 
-                    $scope.selectJobCardServiceChagers = jobCard.serviceChagers;
+                    $scope.selectedCustomer = jobCardMix.client;
+                    $scope.selectedVehicle = jobCardMix.vehicle;
 
-                    $scope.selectedCustomer = jobCard.client;
-                    $scope.selectedVehicle = jobCard.vehicle;
-
-                    $scope.invoiceModel.getClientIsNew(jobCard.client);
-                    $scope.invoiceModel.getVehicleIsNew(jobCard.vehicle);
+                    $scope.invoiceModel.getClientIsNew(jobCardMix.client);
+                    $scope.invoiceModel.getVehicleIsNew(jobCardMix.vehicle);
 
                 };
 
@@ -253,7 +255,7 @@
                 };
 
                 $scope.ui.saveInvoice = function () {
-                    if ($scope.selectedJobCardIndexNo) {
+                    if ($scope.selectedJobCardIndexNo!== null) {
                         if (!$scope.invoiceModel.vehicleIsNew) {
                             if (!$scope.invoiceModel.clientIsNew) {
                                 if ($scope.invoiceModel.paymentData.chequeAmount > 0 || $scope.invoiceModel.paymentData.balance > 0) {
@@ -301,7 +303,7 @@
                 };
 
                 $scope.ui.getCashPayment = function (amount, type) {
-                    if ($scope.selectedJobCardIndexNo) {
+                    if ($scope.selectedJobCardIndexNo!== null) {
                         if (0.0 === parseFloat($scope.invoiceModel.getTotalPaymentTypeWise('CASH'))) {
                             $scope.invoiceModel.getInsertCashPayment(amount, type);
                         }
@@ -320,7 +322,7 @@
                 };
 
                 $scope.ui.getInsertCardAndChequePayment = function (paymentInformation, type) {
-                    if ($scope.selectedJobCardIndexNo) {
+                    if ($scope.selectedJobCardIndexNo!== null) {
                         if (type === "CHEQUE") {
                             if (!paymentInformation.number) {
                                 Notification.error("please enter cheque no");
@@ -351,7 +353,7 @@
                 };
 
                 $scope.ui.insertClientOverPaymentSettlment = function (overPayment, amount) {
-                    if ($scope.selectedJobCardIndexNo) {
+                    if ($scope.selectedJobCardIndexNo!== null) {
                         if (0.0 === parseFloat($scope.invoiceModel.getTotalPaymentTypeWise('OVER_PAYMENT_SETTLEMENT'))) {
                             if (overPayment >= amount) {
                                 $scope.invoiceModel.insertClientOverPaymentSettlment(amount, 'OVER_PAYMENT_SETTLEMENT');

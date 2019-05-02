@@ -17,6 +17,7 @@
                     branchSearchList: [],
                     //trasactons list
                     invoiceData: {},
+                    selectedJobCard: {},
                     employeeData: {},
                     paymentData: {},
                     paymentInfomationData: {},
@@ -98,7 +99,7 @@
                                 .success(function (data) {
                                     that.fuelTypeList = data;
                                 });
-                        
+
                     },
                     clear: function () {
                         this.employeeData = invoiceFactory.newEmployeeData();
@@ -259,17 +260,42 @@
                                 });
                         defer.promise;
                     },
-                    getJobItemHistory: function (jobCard) {
+                    getJobItemHistory: function (jobCardMix) {
                         var defer = $q.defer();
                         var that = this;
                         this.invoiceData.amount = 0.0;
-                        invoiceService.getJobItemHistory(jobCard)
-                                .success(function (data) {
-                                    angular.forEach(data, function (values) {
-                                        that.invoiceData.amount += values.value;
+                        this.selectedJobCard = jobCardMix;
+                        
+                        invoiceService.getJobItemHistory(jobCardMix.indexNo)
+                                .success(function (dataList) {
+                                    console.log(dataList);
+                                    var stockAmount = 0.00;
+                                    var serviceAmount = 0.00;
+                                    var totalAmount = 0.00;
+                                    angular.forEach(dataList, function (data) {
+                                        if (jobCardMix.isDivide) {
+                                            if (data.itemType === "STOCK_ITEM") {
+                                                stockAmount += data.value;
+                                            } else {
+                                                serviceAmount += data.value;
+                                            }
+                                        } else {
+                                            totalAmount += data.value;
+                                        }
+
                                         that.getPaymentDetails();
                                         return;
                                     });
+                                    
+                                    if (jobCardMix.itemType === 'STOCK_ITEM') {
+                                        that.invoiceData.amount = stockAmount;
+                                    } else if (jobCardMix.itemType === 'SERVICE_ITEM') {
+                                        that.invoiceData.amount = serviceAmount;
+                                    } else {
+                                        that.invoiceData.amount = totalAmount;
+                                    }
+                                    that.getPaymentDetails();
+                                    
                                     defer.resolve();
                                 })
                                 .error(function () {
@@ -334,14 +360,8 @@
                         var that = this;
                         invoiceService.pendingJobCards()
                                 .success(function (dataList) {
-                                    console.log("$$$$$$$$$$$$$$$$");
                                     console.log(dataList);
-                                    console.log("$$$$$$$$$$$$$$$$");
                                     that.pendingJobCards = dataList;
-//                                    angular.forEach(data, function (job) {
-//                                        job.vehicleNo = that.vehicle(job.vehicle).vehicleNo;
-//                                        that.pendingJobCards.push(job);
-//                                    });
                                 });
                     },
                     saveInvoice: function () {
@@ -352,6 +372,7 @@
                         this.paymentData.overPaymentAmount = this.paymentData.overSettlementAmount;
                         this.invoicePaymentData.payment = this.paymentData;
                         this.invoicePaymentData.paymentInformationsList = this.paymentInformationList;
+                        this.invoicePaymentData.jobCardMix = this.selectedJobCard;
 
                         invoiceService.saveInvoice(JSON.stringify(this.invoicePaymentData))
                                 .success(function (data) {
@@ -476,11 +497,11 @@
                                 .success(function (data) {
                                     angular.forEach(that.clientList, function (value) {
                                         if (value.indexNo === parseInt(data.indexNo)) {
-                                            value.isNew=false;
+                                            value.isNew = false;
                                             return;
                                         }
                                     });
-                                    that.clientIsNew=false;
+                                    that.clientIsNew = false;
                                     defer.resolve(data);
                                 })
                                 .error(function () {
@@ -496,11 +517,11 @@
                                 .success(function (data) {
                                     angular.forEach(that.vehicleList, function (value) {
                                         if (value.indexNo === parseInt(data.indexNo)) {
-                                            value.isNew=false;
+                                            value.isNew = false;
                                             return;
                                         }
                                     });
-                                    that.vehicleIsNew=false;
+                                    that.vehicleIsNew = false;
                                     defer.resolve(data);
                                 })
                                 .error(function () {

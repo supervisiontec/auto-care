@@ -14,6 +14,7 @@
                 $scope.selectVehicleType = null;
                 $scope.selectPackageItemPosition = null;
                 $scope.selectedJobCardIndexNo = null;
+                $scope.selectedJobCard = {};
                 $scope.selectedCategoryColors = null;
 
                 $scope.selectCategoryPosition = null;
@@ -22,6 +23,7 @@
                 $scope.ui.selectedJobCardRow = function (jobCardData) {
 
                     //find select job card history
+                    $scope.selectedJobCard = jobCardData;
                     $scope.selectVehicleType = null;
                     $scope.model.findJobCardDetail(jobCardData.indexNo)
                             .then(function () {
@@ -88,7 +90,7 @@
                 };
 
                 //Category Names = PACKAGE,SERVICE AND STOCK ITEMS
-                $scope.ui.categorySelections = function (data) {
+                $scope.categorySelections = function (data) {
                     //package or stock items
                     if (!$scope.selectedJobCardIndexNo) {
                         Notification.error("plase select job card");
@@ -108,6 +110,19 @@
                             $scope.model.findByCategoryAndPriceCategory(data, $scope.model.jobCardData.priceCategory);
                         }
                     }
+                };
+                $scope.ui.viewPackageItem = function (item) {
+                    $scope.model.findJobCardPackageItems(item, $scope.selectedJobCard.priceCategory);
+                    
+                    $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'package_item.html',
+                        scope: $scope,
+                        size: 'md'
+                    });
+
                 };
 
                 $scope.ui.getPackageDetails = function ($index, package) {

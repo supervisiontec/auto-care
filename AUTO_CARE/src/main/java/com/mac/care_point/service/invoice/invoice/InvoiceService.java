@@ -5,7 +5,10 @@
  */
 package com.mac.care_point.service.invoice.invoice;
 
-
+import com.mac.care_point.master.branch.BranchRepository;
+import com.mac.care_point.master.branch.model.MBranch;
+import com.mac.care_point.master.sub_branch.SubBranchRepository;
+import com.mac.care_point.master.sub_branch.model.MSubBranch;
 import com.mac.care_point.master.vehicleAssignment.VehicleAssignmentRepository;
 import com.mac.care_point.master.vehicleAssignment.model.TVehicleAssignment;
 import com.mac.care_point.service.invoice.invoice.model.TInvoice;
@@ -21,6 +24,7 @@ import com.mac.care_point.service.invoice.invoice.model.TPayment;
 import com.mac.care_point.service.invoice.invoice.model.TPaymentInformation;
 import com.mac.care_point.service.job_card.JobCardRepository;
 import com.mac.care_point.service.job_card.model.JobCard;
+import com.mac.care_point.service.job_card.model.JobCardMix;
 import com.mac.care_point.service.payment_voucher.PaymentVoucherRepository;
 import com.mac.care_point.system.exception.EntityNotFoundException;
 import com.mac.care_point.zutil.SecurityUtil;
@@ -58,6 +62,12 @@ public class InvoiceService {
     @Autowired
     public PaymentVoucherRepository paymentVoucherRepository;
 
+    @Autowired
+    public BranchRepository branchRepository;
+
+    @Autowired
+    public SubBranchRepository subBranchRepository;
+
     public List<TInvoice> findByJobCard(Integer jobCard) {
         return invoiceRepository.findByJobCard(jobCard);
     }
@@ -66,6 +76,7 @@ public class InvoiceService {
     public TInvoice saveInvoice(InvoicePayment invoicePayment) {
         TInvoice invoice = invoicePayment.getInvoice();
         TPayment payment = invoicePayment.getPayment();
+        JobCardMix jobCardMix = invoicePayment.getJobCardMix();
         List<TPaymentInformation> paymentInformationList = invoicePayment.getPaymentInformationsList();
 
         JobCard jobCard = jobCardRepository.getOne(invoice.getJobCard());
@@ -77,6 +88,7 @@ public class InvoiceService {
         jobCard.setOutTime(outTime);
 
         invoice.setBranch(SecurityUtil.getCurrentUser().getBranch());
+        MBranch mBranch = branchRepository.getOne(invoice.getBranch());
         //step 01
         //invoice save
         if (invoice.getIndexNo() == null) {
@@ -86,8 +98,52 @@ public class InvoiceService {
             }
             invoice.setNumber(maxNo + 1);
         }
+        String invoiceNo = "";
+        invoiceNo += mBranch.getBranchCode() + "/";
+
+        MSubBranch subBranch = new MSubBranch();
+        Integer subBranchIndex = null;
+        Integer updateJobItem = 0;
+        System.out.println("jobCardMix.getItemType()");
+        System.out.println(jobCardMix.getItemType());
+        System.out.println("jobCardMix.getItemType()");
+        if ("SERVICE_ITEM".equals(jobCardMix.getItemType())) {
+            subBranch = subBranchRepository.findByBranchAndType(invoice.getBranch(), "SERVICE_ITEM");
+            subBranchIndex = subBranch.getIndexNo();
+            updateJobItem = invoiceRepository.updateJobItemNot("STOCK_ITEM", jobCardMix.getIndexNo());
+            if (updateJobItem > 0) {
+                System.out.println("STOCK_ITEM updated");
+            }
+            System.out.println("error");
+        } else if ("STOCK_ITEM".equals(jobCardMix.getItemType())) {
+            subBranch = subBranchRepository.findByBranchAndType(invoice.getBranch(), "STOCK_ITEM");
+            subBranchIndex = subBranch.getIndexNo();
+            updateJobItem = invoiceRepository.updateJobItem("STOCK_ITEM", jobCardMix.getIndexNo());
+            if (updateJobItem > 0) {
+                System.out.println("STOCK_ITEM updated");
+            }
+            System.out.println("error");
+        } else {
+            subBranchIndex = null;
+            updateJobItem = invoiceRepository.updateJobItemAll(jobCardMix.getIndexNo());
+            if (updateJobItem > 0) {
+                System.out.println("STOCK_ITEM updated");
+            }
+            System.out.println("error");
+        }
+
+        if (mBranch.getIsDivideInvoice()) {
+            invoiceNo += subBranch.getCode() + "/";
+        }
+        String year = new SimpleDateFormat("yyyy").format(new Date());
+        String month = new SimpleDateFormat("MM").format(new Date());
+        Integer nxtNo = invoiceRepository.getMaximumNumberByBranchAndDate(invoice.getBranch(), year, month, subBranchIndex);
+
+        invoiceNo += year + "/" + month + "/" + nxtNo;
 
         invoice.setStatus(Constant.INVOICE_FORM);
+        invoice.setInvoiceNo(invoiceNo);
+        invoice.setSubBranch(subBranchIndex);
         TInvoice tInvoice = invoiceRepository.save(invoice);
 
         //client cledger save  - create invoice
@@ -267,7 +323,6 @@ public class InvoiceService {
             return invoicePayment;
         }
     }
-
 
     private List<Object[]> getFIFOList(int client) {
         return paymentVoucherRepository.getFIFOList(client);

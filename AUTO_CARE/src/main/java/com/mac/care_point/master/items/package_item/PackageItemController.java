@@ -35,6 +35,16 @@ public class PackageItemController {
     public List<MPackageItem> findByItemGetPackageItem(@PathVariable Integer indexNo) {
         return packageItemService.findByPackages(indexNo);
     }
+    
+    @RequestMapping(value = "/get-package-items-sub/{packageItem}/{priceCategory}", method = RequestMethod.GET)
+    public List<Object[]> findByItemGetPackageItem(@PathVariable Integer packageItem,@PathVariable Integer priceCategory) {
+        System.out.println("");
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        return packageItemService.findByPackages(packageItem,priceCategory);
+    }
 
     @RequestMapping(value = "/save-package", method = RequestMethod.POST)
     public MPackageItem savePackage(@RequestBody MPackageItem packItem) {

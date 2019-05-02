@@ -38,4 +38,9 @@ public class PackageItemService {
     public List<MPackageItem> findByPackages(Integer indexNo) {
         return packageItemRepository.findByPackages(indexNo);
     }
+
+    public List<Object[]> findByPackages(Integer packageItem, Integer priceCategory) {
+        System.out.println(packageItem+" - "+priceCategory);
+        return packageItemRepository.findByPackageSub(packageItem,priceCategory);
+    }
 }

@@ -10,9 +10,12 @@
             <input type="text" class="form-control" placeholder="search . . " ng-model="search"/>
         </div>
         <div class="smart-scroll-y" style="height: calc(100vh - 126px);">
-            <div class="tile tile-155" style="animation: 0.5s zoomInLeft" ng-repeat="details in model.pendingJobCards|filter:{vehicleNo:search}" ng-class="{'selected':details.indexNo == selectedJobCardIndexNo}" ng-click="ui.selectedJobCardRow(details);">
+            <div class="tile tile-155" style="animation: 0.5s zoomInLeft" 
+                 ng-repeat="details in model.pendingJobCards|filter:{vehicleNo:search}"
+                 ng-class="{'selected':details.indexNo == selectedJobCardIndexNo}"
+                 ng-click="ui.selectedJobCardRow(details);">
                 <span> 
-<!--                    <img src="/img/01.png"/>  -->
+                    <!--                    <img src="/img/01.png"/>  -->
                     <img src="../../../img/05.png"/>  
                     <label>{{model.vehicleData(details.vehicle).vehicleNo}}</label>
                     <label ng-show="model.vehicleData(details.vehicle).type === 'NORMAL'" class="label label-primary">NORMAL</label>
@@ -29,7 +32,9 @@
             <div class="row" style="display: flex; flex-flow: column;height: calc(100vh -  52px)">
                 <div class="smart-scroll-y" style="height: calc(100vh - 55px);">
                     <div class="tile-lists">
-                        <div class="tiles tile-200 col-xs-4" style="background: {{detils.colour}};" ng-repeat="detils in model.category|filter:{viewApprove : true}" ng-click="ui.categorySelections(detils);">
+                        <div class="tiles tile-200 col-xs-4" style="background: {{detils.colour}};" 
+                             ng-repeat="detils in model.category|filter:{viewApprove : true}" 
+                             ng-click="categorySelections(detils);">
                             <div style="margin-top: 21px; color: #fff;font-weight: bold;">                   
                                 <div class="col-xs-8" style="font-size: 19px;">
                                     {{detils.name}}
@@ -320,15 +325,20 @@
                                 <col style="width: 10%;"/>
                                 <col style="width: 35%;"/>
                                 <col style="width: 15%;"/>
-                                <tbody class="border-top border-bottom text-bold" ng-repeat="selections in model.jobItemList| filter:{itemType:'!SERVICE_CHARGERS'}" style="animation: 0.5s fadeIn">
+                                <tbody class="border-top border-bottom text-bold" 
+                                       ng-repeat="selections in model.jobItemList| filter:{itemType:'!SERVICE_CHARGERS'}" 
+                                       style="animation: 0.5s fadeIn">
                                     <tr style="border: none" ng-style="selections.isChange === true && {'background-color':'#f48fb1'}">
                                         <td>
                                             <label class="label label-default"  style="display: inline-block; width: 20px;background-color: {{model.categoryColours(model.itemData(selections.item).category).colour}}" ng-show="selections.itemType === 'PACKAGE_ITEM'">P</label>
                                             <label class="label label-default" style="display: inline-block; width: 20px;background-color: {{model.categoryColours(model.itemData(selections.item).category).colour}}" ng-show="selections.itemType === 'SERVICE_ITEM'">S</label>
                                             <label class="label label-default" style="display: inline-block; width: 20px;background-color: {{model.categoryColours(model.itemData(selections.item).category).colour}}" ng-show="selections.itemType === 'STOCK_ITEM'">I</label>
                                         </td>
-                                        <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap" colspan="5" ng-show="selections.itemType != 'STOCK_ITEM'"><small>{{model.itemData(selections.item).name}}</small></td>
-                                        <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap" colspan="5" ng-show="selections.itemType == 'STOCK_ITEM'"><small>{{model.itemData(selections.item).name}}</small></td>        
+                                        <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap" colspan="3" ng-show="selections.itemType != 'STOCK_ITEM'"><small>{{model.itemData(selections.item).name}}</small></td>
+                                        <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap" colspan="3" ng-show="selections.itemType == 'STOCK_ITEM'"><small>{{model.itemData(selections.item).name}}</small></td>        
+                                        <td ng-show="selections.itemType == 'PACKAGE_ITEM'">
+                                            <a class="btn btn-success" ng-click="ui.viewPackageItem(selections.item)"><span class="glyphicon glyphicon-fullscreen"></span></a>
+                                        </td>        
                                     </tr>
                                     <tr style="border: none" ng-style="selections.isChange === true && {'background-color':'#f48fb1'}">
                                         <td colspan="2" ng-show="selections.itemType === 'STOCK_ITEM'"><small>{{model.itemUnitData(selections.itemUnit).name}} &nbsp; {{selections.price}}</td>
@@ -630,6 +640,31 @@
 <div class="fab-container pull-left">
     <a class="fab fab-lg fab-success" ng-hide="ui.model === 'CATEGORY'" ng-click="ui.backToCategory();"><i class="glyphicon glyphicon-chevron-left"></i></a>
 </div>
+<script type="text/ng-template" id="package_item.html">
+    <div class="col-lg-12 background-light">
+        <div class="row">
+            <div class="modal-header bg-green" >
+                <div class="col-lg-12">
+                    <center>
+                        <label class="text-white"> Package Details</label>
+                    </center>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table class="square-table">
+                    <col style="width: 70%;"/>
+                    <col style="width: 30%;"/>
+                    <tbody>
+                        <tr class="background-light" ng-repeat='data in model.packageItemPopupList'>
+                            <td>{{data[0]}}</td>
+                            <td class='text-right'>{{data[1]|number:2}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
 <script type="text/ng-template" id="qty_wise_item_popup.html">
     <div class="col-lg-12 background-light">
     <div class="row">

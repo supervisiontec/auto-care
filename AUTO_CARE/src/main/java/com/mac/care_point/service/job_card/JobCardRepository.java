@@ -88,13 +88,34 @@ public interface JobCardRepository extends JpaRepository<JobCard, Integer> {
             + "	t_job_card.price_category,\n"
             + "	t_job_card.service_chagers,\n"
             + "	t_job_item.item_type,\n"
-            + "	if (t_job_item.item_type='SERVICE_ITEM','label-danger','label-primary') as color\n"
+            + "	if (t_job_item.item_type='SERVICE_ITEM','label-danger','label-success') as color ,\n"
+            + "	m_branch.is_divide_invoice as is_divide \n"
             + "from t_job_card\n"
             + "left join m_vehicle on m_vehicle.index_no=t_job_card.vehicle\n"
             + "left join t_job_item on t_job_item.job_card=t_job_card.index_no \n"
-            + "where t_job_card.branch=:branch and t_job_card.`status`='PENDING' \n"
-            + "and t_job_card.invoice=false and t_job_item.is_invoice=false\n"
+            + "left join m_branch on m_branch.index_no=t_job_card.branch \n"
+            + "where t_job_card.branch=:branch \n"
+            + "and t_job_item.is_invoice=false\n"
             + "group by t_job_card.index_no desc ,  t_job_item.item_type\n"
             + "HAVING t_job_item.item_type<>'SERVICE_CHARGERS'", nativeQuery = true)
     public List<Object[]> devideJobCard(@Param("branch") Integer branch);
+
+    @Query(value = "select t_job_card.index_no,\n"
+            + "	t_job_card.vehicle,\n"
+            + "	m_vehicle.vehicle_no,\n"
+            + "	t_job_card.`client`,\n"
+            + "	t_job_card.date,\n"
+            + "	t_job_card.price_category,\n"
+            + "	t_job_card.service_chagers,\n"
+            + "	'' as item_type,\n"
+            + "	'' as color,\n"
+            + "	m_branch.is_divide_invoice as is_divide\n"
+            + "from t_job_card\n"
+            + "left join m_vehicle on m_vehicle.index_no=t_job_card.vehicle\n"
+            + "left join t_job_item on t_job_item.job_card=t_job_card.index_no \n"
+            + "left join m_branch on m_branch.index_no=t_job_card.branch \n"
+            + "where t_job_card.branch=:branch and t_job_card.`status`='PENDING'\n"
+            + "and t_job_card.invoice=false\n"
+            + "group by t_job_card.index_no desc", nativeQuery = true)
+    public List<Object[]> getPendingJoCard(@Param("branch") Integer branch);
 }

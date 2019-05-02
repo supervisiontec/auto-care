@@ -5,6 +5,7 @@
  */
 package com.mac.care_point.service.invoice.invoice.model;
 
+import com.mac.care_point.service.job_card.model.JobCardMix;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,14 +18,24 @@ public class InvoicePayment implements Serializable {
     private TInvoice invoice;
     private TPayment payment;
     private List<TPaymentInformation> paymentInformationsList;
+    private JobCardMix jobCardMix;
 
     public InvoicePayment() {
     }
 
-    public InvoicePayment(TInvoice invoice, TPayment payment, List<TPaymentInformation> paymentInformationsList) {
+    public InvoicePayment(TInvoice invoice, TPayment payment, List<TPaymentInformation> paymentInformationsList, JobCardMix jobCardMix) {
         this.invoice = invoice;
         this.payment = payment;
         this.paymentInformationsList = paymentInformationsList;
+        this.jobCardMix = jobCardMix;
+    }
+
+    public JobCardMix getJobCardMix() {
+        return jobCardMix;
+    }
+
+    public void setJobCardMix(JobCardMix jobCardMix) {
+        this.jobCardMix = jobCardMix;
     }
 
     public TInvoice getInvoice() {

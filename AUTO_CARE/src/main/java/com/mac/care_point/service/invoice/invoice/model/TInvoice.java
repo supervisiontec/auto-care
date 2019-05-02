@@ -49,6 +49,10 @@ public class TInvoice implements Serializable {
     @NotNull
     @Column(name = "number")
     private int number;
+    
+    @NotNull
+    @Column(name = "invoice_no")
+    private String invoiceNo;
 
     @Basic(optional = false)
     @NotNull
@@ -70,6 +74,9 @@ public class TInvoice implements Serializable {
     @NotNull
     @Column(name = "branch")
     private Integer branch;
+    
+    @Column(name = "sub_branch")
+    private Integer subBranch;
 
     @Basic(optional = false)
     @NotNull
@@ -83,17 +90,36 @@ public class TInvoice implements Serializable {
     public TInvoice() {
     }
 
-    public TInvoice(Integer indexNo, Date date, int number, BigDecimal amount, BigDecimal discountRate, BigDecimal discountAmount, BigDecimal netAmount, Integer branch, String status, Integer jobCard) {
+    public TInvoice(Integer indexNo, Date date, int number, String invoiceNo, BigDecimal amount, BigDecimal discountRate, BigDecimal discountAmount, BigDecimal netAmount, Integer branch, Integer subBranch, String status, Integer jobCard) {
         this.indexNo = indexNo;
         this.date = date;
         this.number = number;
+        this.invoiceNo = invoiceNo;
         this.amount = amount;
         this.discountRate = discountRate;
         this.discountAmount = discountAmount;
         this.netAmount = netAmount;
         this.branch = branch;
+        this.subBranch = subBranch;
         this.status = status;
         this.jobCard = jobCard;
+    }
+
+    public Integer getSubBranch() {
+        return subBranch;
+    }
+
+    public void setSubBranch(Integer subBranch) {
+        this.subBranch = subBranch;
+    }
+
+   
+    public String getInvoiceNo() {
+        return invoiceNo;
+    }
+
+    public void setInvoiceNo(String invoiceNo) {
+        this.invoiceNo = invoiceNo;
     }
 
     public Integer getIndexNo() {

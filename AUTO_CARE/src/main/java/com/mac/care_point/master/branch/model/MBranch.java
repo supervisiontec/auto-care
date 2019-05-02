@@ -64,20 +64,19 @@ public class MBranch implements Serializable {
    
     @Column(name = "type")
     private String type;
+    
+    @Column(name = "is_divide_invoice")
+    private Boolean isDivideInvoice;
 
     public MBranch() {
     }
 
-    public MBranch(Integer indexNo, String branchCode, String regNumber, String name, String addressLine1, String addressLine2, String addressLine3, String telephoneNumber, String type) {
-        this.indexNo = indexNo;
-        this.branchCode = branchCode;
-        this.regNumber = regNumber;
-        this.name = name;
-        this.addressLine1 = addressLine1;
-        this.addressLine2 = addressLine2;
-        this.addressLine3 = addressLine3;
-        this.telephoneNumber = telephoneNumber;
-        this.type = type;
+    public Boolean getIsDivideInvoice() {
+        return isDivideInvoice;
+    }
+
+    public void setIsDivideInvoice(Boolean isDivideInvoice) {
+        this.isDivideInvoice = isDivideInvoice;
     }
 
     public Integer getIndexNo() {

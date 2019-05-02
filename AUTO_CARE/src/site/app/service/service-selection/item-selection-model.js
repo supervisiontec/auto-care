@@ -30,6 +30,7 @@
                     lastJobCardVehicleAttenctionList: [],
                     //job card select filter items
                     filterItems: [],
+                    packageItemPopupList: [],
                     //select job card customer reserved itemes list
                     customerReceivedItems: [],
                     //items bt stock leger
@@ -255,6 +256,7 @@
                         var category = categoryData.indexNo;
                         ItemSelectionService.findByCategoryAndPriceCategory(category, priceCategory)
                                 .success(function (data) {
+                                    console.log(data);
                                     that.filterItems = [];
                                     that.filterItems = data;
                                     defer.resolve();
@@ -291,6 +293,23 @@
                                 })
                                 .error(function () {
                                     that.jobItemList = [];
+                                    defer.reject();
+                                });
+                        return  defer.promise;
+                    },
+                    findJobCardPackageItems: function (index,priceCategory) {
+                        var defer = $q.defer();
+                        var that = this;
+                        that.packageItemPopupList=[];
+                        ItemSelectionService.findJobCardPackageItems(index,priceCategory)
+                                .success(function (data) {
+                                    console.log('package');
+                                    console.log(data);
+                                    that.packageItemPopupList=data;
+                                    defer.resolve();
+                                })
+                                .error(function () {
+                                    that.packageItemPopupList=[];
                                     defer.reject();
                                 });
                         return  defer.promise;
@@ -426,6 +445,7 @@
                         var that = this;
 
                         this.data = ItemSelectionModelFactory.newData();
+                        that.data.isInvoice = 0;
                         if (vehicleType === "REGISTER") {
                             //value change
                             that.data.quantity = 1;
@@ -459,7 +479,7 @@
 
                         this.data = ItemSelectionModelFactory.newData();
                         var itemUnitData = that.itemUnitData(itemUnit);
-
+                        that.data.isInvoice = 0;
                         if (vehicleType === "REGISTER") {
                             that.data.quantity = qty;
                             that.data.price = itemUnitData.salePriceRegister;
